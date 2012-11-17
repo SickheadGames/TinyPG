@@ -1,9 +1,0 @@
-SCC = This is a Source Code Control file
-
-[TinyPG.UnitTests.csproj]
-SCC_Aux_Path = "Z:\Database\VSS"
-SCC_Project_Name = "$/Net/TinyPG/TinyPG.UnitTests", MXAAAAAA
-
-[TinyPG.UnitTests.sln]
-SCC_Aux_Path = "Z:\Database\VSS"
-SCC_Project_Name = "$/Net/TinyPG/TinyPG.UnitTests", MXAAAAAA
