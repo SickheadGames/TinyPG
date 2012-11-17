@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{423B1883-6B35-401B-BB70-B7167F847575}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TinyPG</RootNamespace>
+    <AssemblyName>TinyPG</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodeGenerators\CodeGeneratorFactory.cs" />
+    <Compile Include="CodeGenerators\ICodeGenerator.cs" />
+    <Compile Include="CodeGenerators\CSharp\ParserGenerator.cs" />
+    <Compile Include="CodeGenerators\CSharp\ParseTreeGenerator.cs" />
+    <Compile Include="CodeGenerators\CSharp\ScannerGenerator.cs" />
+    <Compile Include="CodeGenerators\CSharp\TextHighlighterGenerator.cs" />
+    <Compile Include="CodeGenerators\VBNet\ParserGenerator.cs" />
+    <Compile Include="CodeGenerators\VBNet\ParseTreeGenerator.cs" />
+    <Compile Include="CodeGenerators\VBNet\ScannerGenerator.cs" />
+    <Compile Include="CodeGenerators\VBNet\TextHighlighterGenerator.cs" />
+    <Compile Include="Compiler\Compiler.cs" />
+    <Compile Include="Compiler\CompilerResult.cs" />
+    <Compile Include="Compiler\Helper.cs" />
+    <Compile Include="Controls\AssemblyInfo.cs" />
+    <Compile Include="Controls\AutoComplete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\DockExtender\DockExtender.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DockExtender\Floaty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\DockExtender\Overlay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\HeaderExtender.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TabControlEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TextMarker.cs" />
+    <Compile Include="Debug\IParser.cs" />
+    <Compile Include="Debug\IParseTree.cs" />
+    <Compile Include="Debug\IToken.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Highlighter\Parser.cs" />
+    <Compile Include="Highlighter\ParseTree.cs" />
+    <Compile Include="Highlighter\Scanner.cs" />
+    <Compile Include="Highlighter\TextHighlighter.cs" />
+    <Compile Include="ParseTreeViewer.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RegexControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RegexControl.Designer.cs">
+      <DependentUpon>RegexControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compiler\Grammar.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compiler\NonTerminalSymbol.cs" />
+    <Compile Include="Compiler\Parser.cs" />
+    <Compile Include="Compiler\ParseTree.cs" />
+    <Compile Include="Compiler\GrammarTree.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Compiler\Rule.cs" />
+    <Compile Include="Compiler\Scanner.cs" />
+    <Compile Include="Compiler\Symbol.cs" />
+    <None Include="Examples\BNFGrammar 1.3.tpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\BNFGrammar_vb 1.3.tpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\GrammarHighlighter v1.3.tpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\GrammarHighlighter_vb.tpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\simple expression1.tpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\simple expression2.tpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Compiler\TerminalSymbol.cs" />
+    <Compile Include="SyntaxChecker.cs" />
+    <Content Include="Templates\C#\Parser.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\C#\ParseTree.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\C#\Scanner.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\C#\TextHighlighter.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\AutoComplete.resx">
+      <DependentUpon>AutoComplete.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RegexControl.resx">
+      <DependentUpon>RegexControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\VB\Parser.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\VB\ParseTree.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\VB\Scanner.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\VB\TextHighlighter.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

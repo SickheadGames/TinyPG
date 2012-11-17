@@ -1,0 +1,13 @@
+SCC = This is a Source Code Control file
+
+[GeneratedCC.csproj]
+SCC_Aux_Path = "Z:\Database\VSS"
+SCC_Project_Name = "$/Net/TinyPG/GeneratedCC", WSAAAAAA
+
+[TinyPG.csproj]
+SCC_Aux_Path = "Z:\Database\VSS"
+SCC_Project_Name = "$/Net/TinyPG/TinyPG", RTAAAAAA
+
+[TinyPG.sln]
+SCC_Aux_Path = "Z:\Database\VSS"
+SCC_Project_Name = "$/Net/TinyPG/TinyPG", RTAAAAAA

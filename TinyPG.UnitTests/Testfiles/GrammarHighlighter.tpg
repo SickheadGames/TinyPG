@@ -1,0 +1,33 @@
+﻿// a Tiny Grammar Highlighter v1.1
+// Copyright © Herre Kuijpers 2008-2010
+// this grammar is used to quickly scan for sections in the text to be highlighted
+// because real-time highlighting is required, the scan must be done in a few ms.
+// therefore the grammar must be lean and mean. This can be achieved by keeping the
+// parse structure as flat as possible.
+
+<% @TinyPG Namespace="TinyPG.Highlighter" %>
+<% @Scanner Generate="true" %>
+
+EOF			-> @"^$";
+COMMENTLINE       	-> @"//[^\n]*\n*";
+KEYWORD		-> @"^(Start)";
+ATTRIBUTE		-> @"^(Skip|Color)";
+DIRECTIVE		-> @"^(@TinyPG|@Parser|@Scanner|@Grammar|@ParseTree)";
+NONKEYWORD		-> @"\w+";
+
+// improved COMMENTBLOCK, will also match comment optionally with non-closing tags
+[Skip]
+COMMENTBLOCK 		-> @"/\*([^*]+|\*[^/])+(\*/)?";
+
+// string will scan until closing quote or the end of line
+STRING            	-> @"@?\""(\""\""|[^\""])*(""|\n)";
+ATTRIBUTEOPEN		-> @"\[\s*";
+ATTRIBUTECLOSE	-> @"\s*\]\s*";
+DIRECTIVEOPEN		-> @"<%\s*";
+DIRECTIVECLOSE	-> @"\s*%>";
+GRAMMARBLOCK		-> @"(([^\w/""@\[{%<]+)|<[^%]|%[^>]|/[^*/]|@[^""])+";
+CODEBLOCK     	-> @"{[^}]*(\}([^};][^}]*}?)*)?;?";
+
+Start 			-> (DirectiveBlock | AttributeBlock | GRAMMARBLOCK | ATTRIBUTE | DIRECTIVE | KEYWORD | NONKEYWORD | DIRECTIVECLOSE | STRING | CODEBLOCK | COMMENTBLOCK | COMMENTLINE+)  * EOF;
+DirectiveBlock	-> DIRECTIVEOPEN (GRAMMARBLOCK | DIRECTIVE | KEYWORD | NONKEYWORD | STRING | CODEBLOCK | COMMENTBLOCK | COMMENTLINE+)* DIRECTIVECLOSE?;
+AttributeBlock	-> ATTRIBUTEOPEN (ATTRIBUTE | DIRECTIVE | GRAMMARBLOCK| KEYWORD | NONKEYWORD | STRING | CODEBLOCK | COMMENTBLOCK | COMMENTLINE+)* ATTRIBUTECLOSE?;

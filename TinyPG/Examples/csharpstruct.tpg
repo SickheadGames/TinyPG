@@ -1,0 +1,76 @@
+//Tiny Parser Generator v1.2
+//Copyright © Herre Kuijpers 2008-2010
+MODIFIER_KEYWORD 	-> @"public|private|protected|internal";
+PARTIAL_KEYWORD 	-> @"partial";
+USING_KEYWORD 	-> @"using";
+NAMESPACE_KEYWORD 	-> @"namespace";
+CLASS_KEYWORD 	-> @"class";
+PROPERTY_KEYWORD	-> @"get|set";
+EOS			-> ";"; // end of statement
+INHERIT		-> ":"; 
+COMMA			-> ","; 
+ASSIGN			-> @"=";
+BRACEOPEN		-> @"{";
+BRACECLOSE		-> @"}";
+BRACKETOPEN		-> @"\(";
+BRACKETCLOSE		-> @"\)";
+SQUAREOPEN		-> @"\[";
+SQUARECLOSE		-> @"\]";
+NAMESPACE_REFERENCE -> @"([a-zA-Z0-9_]+(\.)?)+";
+TYPE 			-> @"([a-zA-Z0-9_.\[\]]+)(?=(\s+[a-zA-Z_]))"; // dirty trick. Type only matches if followed by an identifier (?=text)
+IDENTIFIER		-> @"[a-zA-Z0-9_]+";
+
+EOF -> @"^$";
+
+
+[Skip]
+WS 			-> @"[\s\n\t]+";
+
+[Skip]
+LINECOMMENT 		-> @"//[^\n]*\n?";
+[Skip]
+COMMENTBLOCK		-> @"/\*[^*]*\*+(?:[^/*][^*]*\*+)*/";
+[Skip]
+REGIONCOMMENT		-> @"#region[^\n]*\n?";
+[Skip]
+ENDREGIONCOMMENT	-> @"#endregion[^\n]*\n?";
+
+
+// beware, pretty greedy expressions!
+IF_CONDITION		-> @"if[^{};]+";
+WHILE_LOOP		-> @"while[^{};]+";
+FOREACH_LOOP		-> @"foreach[^{};]+";
+FOR_LOOP		-> @"for[^)]+\)";
+ANYTHING		-> @"[^\s\n\t{};]*[^{};\n]+";
+
+
+
+Start 		-> Program? EOF;
+Program 	-> Usings Namespace;
+Usings 	-> UsingStatement*;
+UsingStatement -> USING_KEYWORD NAMESPACE_REFERENCE EOS;
+Namespace 	-> NAMESPACE_KEYWORD NAMESPACE_REFERENCE NamespaceBody;
+NamespaceBody -> BRACEOPEN ClassDeclaration+ BRACECLOSE;
+ClassDeclaration -> MODIFIER_KEYWORD? PARTIAL_KEYWORD? CLASS_KEYWORD IDENTIFIER (INHERIT NAMESPACE_REFERENCE)? ClassBody;
+ClassBody	-> BRACEOPEN Declaration+ BRACECLOSE;
+Declaration	-> MODIFIER_KEYWORD? TYPE? IDENTIFIER ((Assigment | Property | Method)? | EOS);
+Assigment	-> ASSIGN ANYTHING EOS;
+Property 	-> TypedIndexer? BRACEOPEN (PROPERTY_KEYWORD CodeBlock)+ BRACECLOSE;
+TypedIndexer	-> SQUAREOPEN TypedParameter SQUARECLOSE;
+Method 	-> ParamDeclarations CodeBlock;
+CodeBlock 	-> (BRACEOPEN Statements BRACECLOSE);
+Statements 	-> Statement+;
+Statement	-> (LINECOMMENT | ForeachStatement | ForStatement | IfStatement | SimpleStatement); // first parse foreach statement
+ParamDeclarations -> BRACKETOPEN (TypedParameter COMMA?)* BRACKETCLOSE;
+TypedParameter -> TYPE IDENTIFIER;
+SimpleStatement -> (ANYTHING* EOS);
+IfStatement	-> IF_CONDITION CodeBlock?;
+ForeachStatement -> FOREACH_LOOP CodeBlock?;
+ForStatement 	-> FOR_LOOP CodeBlock?;
+
+
+
+ 
+
+
+
