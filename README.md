@@ -18,7 +18,7 @@ These are the new features and fixes we have added to the original code:
 
  - Support for `[IgnoreCase]` flag on terminal symbols.
  - Syntax highlighting now supports `var` keyword.
- - ParseError now contains correct line numbers.
+ - `ParseError` now has correct line numbers.
 
 
 
