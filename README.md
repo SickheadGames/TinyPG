@@ -12,9 +12,9 @@ The source code is licensed under the [Code Project Open License (CPOL)
 ](http://www.codeproject.com/info/cpol10.aspx).
 
 
-### New Features
+### Features & Fixes
 
-These are the new features added from the original code.
+These are the new features and fixes we have added to the original code:
 
  - Support for `[IgnoreCase]` flag on terminal symbols.
  - Syntax highlighting now supports `var` keyword.
