@@ -95,7 +95,7 @@ namespace TinyPG.Highlighter
             Patterns.Add(TokenType.ATTRIBUTECLOSE, regex);
             Tokens.Add(TokenType.ATTRIBUTECLOSE);
 
-            regex = new Regex(@"^(abstract|as|base|break|case|catch|checked|class|const|continue|decimal|default|delegate|double|do|else|enum|event|explicit|extern|false|finally|fixed|float|foreach|for|get|goto|if|implicit|interface|internal|int|in|is|lock|namespace|new|null|object|operator|out|override|params|partial|private|protected|public|readonly|ref|return|sealed|set|sizeof|stackalloc|static|struct|switch|throw|this|true|try|typeof|unchecked|unsafe|ushort|using|virtual|void|volatile|while)", RegexOptions.Compiled);
+            regex = new Regex(@"^(abstract|as|base|break|case|catch|checked|class|const|continue|decimal|default|delegate|double|do|else|enum|event|explicit|extern|false|finally|fixed|float|foreach|for|get|goto|if|implicit|interface|internal|int|in|is|lock|namespace|new|null|object|operator|out|override|params|partial|private|protected|public|readonly|ref|return|sealed|set|sizeof|stackalloc|static|struct|switch|throw|this|true|try|typeof|unchecked|unsafe|ushort|using|var|virtual|void|volatile|while)", RegexOptions.Compiled);
             Patterns.Add(TokenType.CS_KEYWORD, regex);
             Tokens.Add(TokenType.CS_KEYWORD);
 
@@ -103,7 +103,7 @@ namespace TinyPG.Highlighter
             Patterns.Add(TokenType.VB_KEYWORD, regex);
             Tokens.Add(TokenType.VB_KEYWORD);
 
-            regex = new Regex(@"^(abstract|as|base|break|case|catch|checked|class|const|continue|decimal|default|delegate|double|do|else|enum|event|explicit|extern|false|finally|fixed|float|foreach|for|get|goto|if|implicit|interface|internal|int|in|is|lock|namespace|new|null|object|operator|out|override|params|partial|private|protected|public|readonly|ref|return|sealed|set|sizeof|stackalloc|static|struct|switch|throw|this|true|try|typeof|unchecked|unsafe|ushort|using|virtual|void|volatile|while)", RegexOptions.Compiled);
+            regex = new Regex(@"^(abstract|as|base|break|case|catch|checked|class|const|continue|decimal|default|delegate|double|do|else|enum|event|explicit|extern|false|finally|fixed|float|foreach|for|get|goto|if|implicit|interface|internal|int|in|is|lock|namespace|new|null|object|operator|out|override|params|partial|private|protected|public|readonly|ref|return|sealed|set|sizeof|stackalloc|static|struct|switch|throw|this|true|try|typeof|unchecked|unsafe|ushort|using|var|virtual|void|volatile|while)", RegexOptions.Compiled);
             Patterns.Add(TokenType.DOTNET_KEYWORD, regex);
             Tokens.Add(TokenType.DOTNET_KEYWORD);
 
