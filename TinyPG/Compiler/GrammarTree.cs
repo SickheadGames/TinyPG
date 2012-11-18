@@ -266,6 +266,10 @@ namespace TinyPG.Compiler
                         }
                     }
                     break;
+                case "IgnoreCase":
+                    if (!(symbol is TerminalSymbol))
+                        tree.Errors.Add(new ParseError("Attribute for Non terminal rule not allowed: " + node.Nodes[1].Token.Text, 0x1035, 0, node.Token.StartPos, node.Token.StartPos, node.Token.Length));
+                    break;
                 default:
                     tree.Errors.Add(new ParseError("Attribute not supported: " + node.Nodes[1].Token.Text, 0x1036, node.Nodes[1]));
                     break;

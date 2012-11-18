@@ -79,7 +79,7 @@ namespace TinyPG.Highlighter
             Patterns.Add(TokenType.ATTRIBUTESYMBOL, regex);
             Tokens.Add(TokenType.ATTRIBUTESYMBOL);
 
-            regex = new Regex(@"^(Skip|Color)", RegexOptions.Compiled);
+            regex = new Regex(@"^(Skip|Color|IgnoreCase)", RegexOptions.Compiled);
             Patterns.Add(TokenType.ATTRIBUTEKEYWORD, regex);
             Tokens.Add(TokenType.ATTRIBUTEKEYWORD);
 
