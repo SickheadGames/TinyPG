@@ -11,3 +11,18 @@ The original code and documentation can be found in the article ['A Tiny Parser 
 The source code is licensed under the [Code Project Open License (CPOL)
 ](http://www.codeproject.com/info/cpol10.aspx).
 
+
+### New Features
+
+These are the new features added from the original code.
+
+ - Support for `[IgnoreCase]` flag on terminal symbols.
+
+
+
+
+
+
+
+
+
