@@ -165,7 +165,6 @@ namespace TinyPG
         private void ParseExtProduction(ParseNode parent)
         {
             Token tok;
-            ParseNode n;
             ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.ExtProduction), "ExtProduction");
             parent.Nodes.Add(node);
 
@@ -485,7 +484,6 @@ namespace TinyPG
         private void ParseConcatRule(ParseNode parent)
         {
             Token tok;
-            ParseNode n;
             ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.ConcatRule), "ConcatRule");
             parent.Nodes.Add(node);
 
