@@ -596,7 +596,7 @@ namespace TinyPG
             if (tree.Errors.Count > 0)
             {
                 foreach (ParseError error in tree.Errors)
-                    output.AppendLine(string.Format("({0},{1}): {2}",error.Line, error.Column, error.Message));
+                    output.AppendLine(string.Format("({0},{1}): {2}", error.Line, error.Column, error.Message));
                 output.AppendLine("Syntax errors in grammar found.");
 
                 if (tree.Errors.Count > 0)
@@ -623,9 +623,7 @@ namespace TinyPG
                 if (tree.Errors.Count > 0)
                 {
                     foreach (ParseError error in tree.Errors)
-                    {
-                        output.AppendLine(error.Message);
-                    }
+                        output.AppendLine(string.Format("({0},{1}): {2}", error.Line, error.Column, error.Message));
                     output.AppendLine("Semantic errors in grammar found.");
                     if (tree.Errors.Count > 0)
                         textEditor.Select(tree.Errors[0].Position, tree.Errors[0].Length > 0 ? tree.Errors[0].Length : 1);
@@ -848,16 +846,16 @@ namespace TinyPG
             {
                 int pos = textEditor.SelectionStart;
                 statusPos.Text = pos.ToString(CultureInfo.InvariantCulture);
-                statusCol.Text = (pos - textEditor.GetFirstCharIndexOfCurrentLine()).ToString(CultureInfo.InvariantCulture);
-                statusLine.Text = textEditor.GetLineFromCharIndex(pos).ToString(CultureInfo.InvariantCulture);
+                statusCol.Text = (pos - textEditor.GetFirstCharIndexOfCurrentLine() + 1).ToString(CultureInfo.InvariantCulture);
+                statusLine.Text = (textEditor.GetLineFromCharIndex(pos) + 1).ToString(CultureInfo.InvariantCulture);
 
             }
             else if (textInput.Focused)
             {
                 int pos = textInput.SelectionStart;
                 statusPos.Text = pos.ToString(CultureInfo.InvariantCulture);
-                statusCol.Text = (pos - textInput.GetFirstCharIndexOfCurrentLine()).ToString(CultureInfo.InvariantCulture);
-                statusLine.Text = textInput.GetLineFromCharIndex(pos).ToString(CultureInfo.InvariantCulture);
+                statusCol.Text = (pos - textInput.GetFirstCharIndexOfCurrentLine() + 1).ToString(CultureInfo.InvariantCulture);
+                statusLine.Text = (textInput.GetLineFromCharIndex(pos) + 1).ToString(CultureInfo.InvariantCulture);
             }
             else
             {
