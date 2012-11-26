@@ -35,6 +35,9 @@ namespace TinyPG.CodeGenerators.CSharp
                 skiplist.AppendLine("            SkipList.Add(TokenType." + s.Name + ");");
             }
 
+            if (Grammar.FileAndLine != null)
+                skiplist.AppendLine("            FileAndLine = TokenType." + Grammar.FileAndLine.Name + ";");
+
             // build system tokens
             tokentype.AppendLine("\r\n            //Non terminal tokens:");
             tokentype.AppendLine(Helper.Outline("_NONE_", 3, "= 0,", 5));

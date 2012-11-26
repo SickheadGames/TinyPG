@@ -11,7 +11,7 @@
 EOF			-> @"^$";
 COMMENTLINE       	-> @"//[^\n]*\n*";
 KEYWORD		-> @"^(Start)";
-ATTRIBUTE		-> @"^(Skip|Color|IgnoreCase)";
+ATTRIBUTE		-> @"^(Skip|Color|IgnoreCase|FileAndLine)";
 DIRECTIVE		-> @"^(@TinyPG|@Parser|@Scanner|@Grammar|@ParseTree|@TextHighlighter)";
 NONKEYWORD		-> @"\w+";
 

@@ -35,7 +35,7 @@ namespace TinyPG.Highlighter
         {
         }
 
-        public ParseError(string message, int code, ParseNode node) : this(message, code,  0, node.Token.StartPos, node.Token.StartPos, node.Token.Length)
+        public ParseError(string message, int code, ParseNode node) : this(message, code, node.Token.Line, node.Token.Column, node.Token.StartPos, node.Token.Length)
         {
         }
 
@@ -200,27 +200,37 @@ namespace TinyPG.Highlighter
 
         protected virtual object EvalCommentBlock(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalDirectiveBlock(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalGrammarBlock(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalAttributeBlock(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalCodeBlock(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
 

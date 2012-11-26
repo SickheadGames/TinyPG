@@ -79,7 +79,7 @@ namespace TinyPG.Highlighter
             Patterns.Add(TokenType.ATTRIBUTESYMBOL, regex);
             Tokens.Add(TokenType.ATTRIBUTESYMBOL);
 
-            regex = new Regex(@"^(Skip|Color|IgnoreCase)", RegexOptions.Compiled);
+            regex = new Regex(@"^(Skip|Color|IgnoreCase|FileAndLine)", RegexOptions.Compiled);
             Patterns.Add(TokenType.ATTRIBUTEKEYWORD, regex);
             Tokens.Add(TokenType.ATTRIBUTEKEYWORD);
 
@@ -207,8 +207,8 @@ namespace TinyPG.Highlighter
             this.Input = input;
             StartPos = 0;
             EndPos = 0;
-            CurrentLine = 0;
-            CurrentColumn = 0;
+            CurrentLine = 1;
+            CurrentColumn = 1;
             CurrentPosition = 0;
             LookAheadToken = null;
         }
@@ -231,6 +231,7 @@ namespace TinyPG.Highlighter
             LookAheadToken = null; // reset lookahead token, so scanning will continue
             StartPos = tok.EndPos;
             EndPos = tok.EndPos; // set the tokenizer to the new scan position
+            CurrentLine = tok.Line + (tok.Text.Length - tok.Text.Replace("\n", "").Length);
             return tok;
         }
 
@@ -242,6 +243,8 @@ namespace TinyPG.Highlighter
         {
             int i;
             int startpos = StartPos;
+            int endpos = EndPos;
+            int currentline = CurrentLine;
             Token tok = null;
             List<TokenType> scantokens;
 
@@ -268,7 +271,7 @@ namespace TinyPG.Highlighter
                 TokenType index = (TokenType)int.MaxValue;
                 string input = Input.Substring(startpos);
 
-                tok = new Token(startpos, EndPos);
+                tok = new Token(startpos, endpos);
 
                 for (i = 0; i < scantokens.Count; i++)
                 {
@@ -292,9 +295,16 @@ namespace TinyPG.Highlighter
                     tok.Text = Input.Substring(tok.StartPos, 1);
                 }
 
+                // Update the line and column count.
+                tok.Line = currentline;
+                if (tok.StartPos < Input.Length)
+                    tok.Column = tok.StartPos - Input.LastIndexOf('\n', tok.StartPos);
+
                 if (SkipList.Contains(tok.Type))
                 {
                     startpos = tok.EndPos;
+                    endpos = tok.EndPos;
+                    currentline = tok.Line + (tok.Text.Length - tok.Text.Replace("\n", "").Length);
                     Skipped.Add(tok);
                 }
                 else
@@ -376,6 +386,8 @@ namespace TinyPG.Highlighter
 
     public class Token
     {
+        private int line;
+        private int column;
         private int startpos;
         private int endpos;
         private string text;
@@ -383,6 +395,16 @@ namespace TinyPG.Highlighter
 
         // contains all prior skipped symbols
         private List<Token> skipped;
+
+        public int Line { 
+            get { return line; } 
+            set { line = value; }
+        }
+
+        public int Column {
+            get { return column; } 
+            set { column = value; }
+        }
 
         public int StartPos { 
             get { return startpos;} 

@@ -247,15 +247,14 @@ namespace TinyPG.Compiler
                     if (symbol is TerminalSymbol)
                         grammar.SkipSymbols.Add(symbol);
                     else
-                        tree.Errors.Add(new ParseError("Attribute for Non terminal rule not allowed: " + node.Nodes[1].Token.Text, 0x1035, 0, node.Token.StartPos, node.Token.StartPos, node.Token.Length));
+                        tree.Errors.Add(new ParseError("Attribute for non-terminal rule not allowed: " + node.Nodes[1].Token.Text, 0x1035, node));
                     break;
                 case "Color":
                     if (symbol is NonTerminalSymbol)
-                        tree.Errors.Add(new ParseError("Attribute for Non terminal rule not allowed: " + node.Nodes[1].Token.Text, 0x1035, 0, node.Token.StartPos, node.Token.StartPos, node.Token.Length));
+                        tree.Errors.Add(new ParseError("Attribute for non-terminal rule not allowed: " + node.Nodes[1].Token.Text, 0x1035, node));
 
                     if (symbol.Attributes["Color"].Length != 1 && symbol.Attributes["Color"].Length != 3)
                         tree.Errors.Add(new ParseError("Attribute " + node.Nodes[1].Token.Text + " has too many or missing parameters", 0x103A, node.Nodes[1]));
-
 
                     for (int i = 0; i < symbol.Attributes["Color"].Length; i++)
                     {
@@ -268,7 +267,16 @@ namespace TinyPG.Compiler
                     break;
                 case "IgnoreCase":
                     if (!(symbol is TerminalSymbol))
-                        tree.Errors.Add(new ParseError("Attribute for Non terminal rule not allowed: " + node.Nodes[1].Token.Text, 0x1035, 0, node.Token.StartPos, node.Token.StartPos, node.Token.Length));
+                        tree.Errors.Add(new ParseError("Attribute for non-terminal rule not allowed: " + node.Nodes[1].Token.Text, 0x1035, node));
+                    break;
+                case "FileAndLine":
+                    if (symbol is TerminalSymbol)
+                    {
+                        grammar.SkipSymbols.Add(symbol);
+                        grammar.FileAndLine = symbol;
+                    }
+                    else
+                        tree.Errors.Add(new ParseError("Attribute for non-terminal rule not allowed: " + node.Nodes[1].Token.Text, 0x1035, node));
                     break;
                 default:
                     tree.Errors.Add(new ParseError("Attribute not supported: " + node.Nodes[1].Token.Text, 0x1036, node.Nodes[1]));
