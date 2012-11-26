@@ -141,6 +141,7 @@
             this.textBox.Size = new System.Drawing.Size(331, 353);
             this.textBox.TabIndex = 9;
             this.textBox.Text = resources.GetString("textBox.Text");
+            this.textBox.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             this.textBox.Leave += new System.EventHandler(this.textBox_Leave);
             // 
             // panel1

@@ -32,8 +32,9 @@ namespace TinyPG.Controls
 
         private void textBox_TextChanged(object sender, EventArgs e)
         {
-
+            ValidateExpression();
         }
+
         private void textBox_Leave(object sender, EventArgs e)
         {
             ValidateExpression();
@@ -41,12 +42,19 @@ namespace TinyPG.Controls
 
         private void ValidateExpression()
         {
-
+            // Suspend events, layout changes, and drawing updates.
+            textBox.TextChanged -= textBox_TextChanged;
+            textBox.SuspendLayout();
+            DrawingControl.SuspendDrawing(textBox);
+ 
             try
             {
-                textBox.SuspendLayout();
+                // Save the original selection so we can restore it.
+                var start = textBox.SelectionStart;
+                var length = textBox.SelectionLength;
+
+                // Clear the previous highlights.
                 textBox.SelectAll();
-                //textBox.SelectionColor = Color.Black;
                 textBox.SelectionBackColor = Color.White;
                 textBox.DeselectAll();
 
@@ -66,7 +74,6 @@ namespace TinyPG.Controls
                     foreach (Match m in ms)
                     {
                         textBox.Select(m.Index, m.Length);
-                        //textBox.SelectionColor = Color.Red;
                         textBox.SelectionBackColor = Color.LightPink;
 
 
@@ -83,8 +90,9 @@ namespace TinyPG.Controls
 
                     }
                 }
-                textBox.DeselectAll();
-                textBox.ResumeLayout();
+
+                // Restore the previous selection.
+                textBox.Select(start, length);               
                 textMatches.Text = sb.ToString();
             }
             catch (Exception ex)
@@ -92,6 +100,10 @@ namespace TinyPG.Controls
                 statusText.Text = ex.Message;
             }
 
+            // Resume everything now that we're done.
+            textBox.ResumeLayout();
+            DrawingControl.ResumeDrawing(textBox);
+            textBox.TextChanged += textBox_TextChanged;
         }
 
         private void checkIgnoreCase_CheckedChanged(object sender, EventArgs e)
