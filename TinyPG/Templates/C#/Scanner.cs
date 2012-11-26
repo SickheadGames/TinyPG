@@ -127,9 +127,11 @@ namespace <%Namespace%>
                     tok.Text = Input.Substring(tok.StartPos, 1);
                 }
 
-                // Increment the line count.
+                // Update the line and column count.
                 CurrentLine += tok.Text.Length - tok.Text.Replace("\n", "").Length;
-                tok.StartLine = CurrentLine;
+                tok.Line = CurrentLine;
+                if (tok.StartPos < Input.Length)
+                    tok.Column = tok.StartPos - Input.LastIndexOf('\n', tok.StartPos);
 
                 if (SkipList.Contains(tok.Type))
                 {
@@ -161,7 +163,8 @@ namespace <%Namespace%>
 
     public class Token<%IToken%>
     {
-        private int startline;
+        private int line;
+        private int column;
         private int startpos;
         private int endpos;
         private string text;
@@ -170,9 +173,14 @@ namespace <%Namespace%>
         // contains all prior skipped symbols
         private List<Token> skipped;
 
-        public int StartLine { 
-            get { return startline;} 
-            set { startline = value; }
+        public int Line { 
+            get { return line; } 
+            set { line = value; }
+        }
+
+        public int Column {
+            get { return column; } 
+            set { column = value; }
         }
 
         public int StartPos { 

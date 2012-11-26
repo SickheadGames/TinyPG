@@ -93,7 +93,7 @@ namespace TinyPG.CodeGenerators.VBNet
                     sb.AppendLine(Indent + "node.Token.UpdateRange(tok)");
                     sb.AppendLine(Indent + "node.Nodes.Add(n)");
                     sb.AppendLine(Indent + "If tok.Type <> TokenType." + r.Symbol.Name + " Then");
-                    sb.AppendLine(Indent + "    m_tree.Errors.Add(New ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found. Expected \" + TokenType." + r.Symbol.Name + ".ToString(), &H1001, tok.StartLine, 0, tok.StartPos, tok.EndPos - tok.StartPos))");
+                    sb.AppendLine(Indent + "    m_tree.Errors.Add(New ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found. Expected \" + TokenType." + r.Symbol.Name + ".ToString(), &H1001, tok.Line, tok.Column, tok.StartPos, tok.EndPos - tok.StartPos))");
                     sb.AppendLine(Indent + "    Return\r\n");
                     sb.AppendLine(Indent + "End If\r\n");
                     break;
@@ -240,7 +240,7 @@ namespace TinyPG.CodeGenerators.VBNet
                         }
                     }
                     sb.AppendLine(Indent + "    Case Else");
-                    sb.AppendLine(Indent + "        m_tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found.\", &H0002, tok.StartLine, 0, tok.StartPos, tok.EndPos - tok.StartPos))");
+                    sb.AppendLine(Indent + "        m_tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found.\", &H0002, tok.Line, tok.Column, tok.StartPos, tok.EndPos - tok.StartPos))");
                     sb.AppendLine(Indent + "        Exit Select");
                     sb.AppendLine(Indent + "End Select" + Helper.AddComment("'", "Choice Rule"));
                     break;
