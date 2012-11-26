@@ -42,8 +42,8 @@ namespace <%Namespace%>
             this.Input = input;
             StartPos = 0;
             EndPos = 0;
-            CurrentLine = 0;
-            CurrentColumn = 0;
+            CurrentLine = 1;
+            CurrentColumn = 1;
             CurrentPosition = 0;
             LookAheadToken = null;
         }
