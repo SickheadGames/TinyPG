@@ -218,57 +218,79 @@ namespace TinyPG
 
         protected virtual object EvalDirective(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalNameValue(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalExtProduction(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalAttribute(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalParams(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalParam(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalProduction(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalRule(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalSubrule(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalConcatRule(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
         protected virtual object EvalSymbol(ParseTree tree, params object[] paramlist)
         {
-            throw new NotImplementedException();
+            foreach (var node in Nodes)
+                node.Eval(tree, paramlist);
+            return null;
         }
 
 
