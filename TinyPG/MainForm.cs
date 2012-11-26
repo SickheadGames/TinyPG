@@ -591,7 +591,7 @@ namespace TinyPG
             string input = textEditor.Text;
             Scanner scanner = new Scanner();
             Parser parser = new Parser(scanner);
-            ParseTree tree = parser.Parse(input, new GrammarTree());
+            ParseTree tree = parser.Parse(input, GrammarFile, new GrammarTree());
 
             if (tree.Errors.Count > 0)
             {

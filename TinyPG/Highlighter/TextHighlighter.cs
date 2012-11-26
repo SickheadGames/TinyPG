@@ -425,7 +425,7 @@ namespace TinyPG.Highlighter
                     continue;
                 }
 
-                _tree = (ParseTree)Parser.Parse(_currenttext);
+                _tree = (ParseTree)Parser.Parse(_currenttext, string.Empty);
                 lock (treelock)
                 {
                     if (textChanged)

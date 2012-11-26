@@ -72,7 +72,7 @@ namespace TinyPG.UnitTests
             string grammarfile = System.IO.File.ReadAllText(filename);
             Scanner scanner = new Scanner();
             Parser parser = new Parser(scanner);
-            GrammarTree tree = (GrammarTree)parser.Parse(grammarfile, new GrammarTree());
+            GrammarTree tree = (GrammarTree)parser.Parse(grammarfile, filename, new GrammarTree());
             return tree;
         }
 

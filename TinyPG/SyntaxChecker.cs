@@ -51,7 +51,7 @@ namespace TinyPG
                 textchanged = false;
 
                 scanner.Init(text);
-                SyntaxTree = parser.Parse(text, new GrammarTree());
+                SyntaxTree = parser.Parse(text, "", new GrammarTree());
                 if (SyntaxTree.Errors.Count > 0)
                     SyntaxTree.Errors.Clear();
 

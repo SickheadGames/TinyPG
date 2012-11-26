@@ -85,17 +85,17 @@ namespace TinyPG.Compiler
                         }
                         catch (Exception ex)
                         {
-                            tree.Errors.Add(new ParseError("regular expression for '" + n.Nodes[n.Nodes.Count - 1].Nodes[0].Token.Text + "' results in error: " + ex.Message, 0x1020, 0, n.Nodes[0].Token.StartPos, n.Nodes[0].Token.StartPos, n.Nodes[0].Token.EndPos - n.Nodes[0].Token.StartPos));
+                            tree.Errors.Add(new ParseError("regular expression for '" + n.Nodes[n.Nodes.Count - 1].Nodes[0].Token.Text + "' results in error: " + ex.Message, 0x1020, n.Nodes[0]));
                             continue;
                         }
 
                         if (terminal.Name == "Start")
-                            tree.Errors.Add(new ParseError("'Start' symbol cannot be a regular expression.", 0x1021, 0, n.Nodes[0].Token.StartPos, n.Nodes[0].Token.StartPos, n.Nodes[0].Token.EndPos - n.Nodes[0].Token.StartPos));
+                            tree.Errors.Add(new ParseError("'Start' symbol cannot be a regular expression.", 0x1021, n.Nodes[0]));
 
                         if (g.Symbols.Find(terminal.Name) == null)
                             g.Symbols.Add(terminal);
                         else
-                            tree.Errors.Add(new ParseError("Terminal already declared: " + terminal.Name, 0x1022, 0, n.Nodes[0].Token.StartPos, n.Nodes[0].Token.StartPos, n.Nodes[0].Token.EndPos - n.Nodes[0].Token.StartPos));
+                            tree.Errors.Add(new ParseError("Terminal already declared: " + terminal.Name, 0x1022, n.Nodes[0]));
 
                     }
                     else
@@ -104,7 +104,7 @@ namespace TinyPG.Compiler
                         if (g.Symbols.Find(nts.Name) == null)
                             g.Symbols.Add(nts);
                         else
-                            tree.Errors.Add(new ParseError("Non terminal already declared: " + nts.Name, 0x1023, 0, n.Nodes[0].Token.StartPos, n.Nodes[0].Token.StartPos, n.Nodes[0].Token.EndPos - n.Nodes[0].Token.StartPos));
+                            tree.Errors.Add(new ParseError("Non terminal already declared: " + nts.Name, 0x1023, n.Nodes[0]));
 
                         for (int i = 0; i < n.Nodes.Count - 1; i++)
                         {
@@ -120,7 +120,7 @@ namespace TinyPG.Compiler
 
             if (!StartFound)
             {
-                tree.Errors.Add(new ParseError("The grammar requires 'Start' to be a production rule.", 0x0024, 0, 0, 0, 0));
+                tree.Errors.Add(new ParseError("The grammar requires 'Start' to be a production rule.", 0x0024));
                 return g;
             }
 
@@ -315,7 +315,7 @@ namespace TinyPG.Compiler
                     case TokenType.HEX:
                         return long.Parse(node.Nodes[0].Token.Text.Substring(2), System.Globalization.NumberStyles.HexNumber);
                     default:
-                        tree.Errors.Add(new ParseError("Attribute parameter is not a valid value: " + node.Token.Text, 0x1037, 0, node.Token.StartPos, node.Token.StartPos, node.Token.Length));
+                        tree.Errors.Add(new ParseError("Attribute parameter is not a valid value: " + node.Token.Text, 0x1037, node));
                         break;
                 }
             }
@@ -471,7 +471,7 @@ namespace TinyPG.Compiler
                 Symbol s = symbols.Find(match.Groups["var"].Value);
                 if (s == null)
                 {
-                    tree.Errors.Add(new ParseError("Variable $" + match.Groups["var"].Value + " cannot be matched.", 0x1016, 0, node.Token.StartPos + match.Groups["var"].Index, node.Token.StartPos + match.Groups["var"].Index, match.Groups["var"].Length));
+                    tree.Errors.Add(new ParseError("Variable $" + match.Groups["var"].Value + " cannot be matched.", 0x1016, node.Token.File, node.Token.StartPos + match.Groups["var"].Index, node.Token.StartPos + match.Groups["var"].Index, match.Groups["var"].Length));
                     break; // error situation
                 }
             }
