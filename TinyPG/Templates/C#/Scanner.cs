@@ -66,6 +66,7 @@ namespace <%Namespace%>
             LookAheadToken = null; // reset lookahead token, so scanning will continue
             StartPos = tok.EndPos;
             EndPos = tok.EndPos; // set the tokenizer to the new scan position
+            CurrentLine = tok.Line + (tok.Text.Length - tok.Text.Replace("\n", "").Length);
             return tok;
         }
 
@@ -77,6 +78,8 @@ namespace <%Namespace%>
         {
             int i;
             int startpos = StartPos;
+            int endpos = EndPos;
+            int currentline = CurrentLine;
             Token tok = null;
             List<TokenType> scantokens;
 
@@ -103,7 +106,7 @@ namespace <%Namespace%>
                 TokenType index = (TokenType)int.MaxValue;
                 string input = Input.Substring(startpos);
 
-                tok = new Token(startpos, EndPos);
+                tok = new Token(startpos, endpos);
 
                 for (i = 0; i < scantokens.Count; i++)
                 {
@@ -128,14 +131,15 @@ namespace <%Namespace%>
                 }
 
                 // Update the line and column count.
-                CurrentLine += tok.Text.Length - tok.Text.Replace("\n", "").Length;
-                tok.Line = CurrentLine;
+                tok.Line = currentline;
                 if (tok.StartPos < Input.Length)
                     tok.Column = tok.StartPos - Input.LastIndexOf('\n', tok.StartPos);
 
                 if (SkipList.Contains(tok.Type))
                 {
                     startpos = tok.EndPos;
+                    endpos = tok.EndPos;
+                    currentline = tok.Line + (tok.Text.Length - tok.Text.Replace("\n", "").Length);
                     Skipped.Add(tok);
                 }
                 else
