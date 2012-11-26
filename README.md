@@ -20,6 +20,7 @@ These are the new features and fixes we have added to the original code:
  - Syntax highlighting now supports `var` keyword.
  - `ParseError` now has correct line numbers.
  - Regex tool now updates live without flicker.
+ - The TinyPG compiler will now display the error line number in the output.
 
 
 

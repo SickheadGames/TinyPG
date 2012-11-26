@@ -596,14 +596,11 @@ namespace TinyPG
             if (tree.Errors.Count > 0)
             {
                 foreach (ParseError error in tree.Errors)
-                {
-                    output.AppendLine(error.Message);
-                }
+                    output.AppendLine(string.Format("({0},{1}): {2}",error.Line, error.Column, error.Message));
                 output.AppendLine("Syntax errors in grammar found.");
 
                 if (tree.Errors.Count > 0)
                     textEditor.Select(tree.Errors[0].Position, tree.Errors[0].Length > 0 ? tree.Errors[0].Length : 1);
-
             }
             else
             {

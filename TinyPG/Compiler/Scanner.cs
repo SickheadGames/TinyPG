@@ -218,6 +218,12 @@ namespace TinyPG
                     tok.Text = Input.Substring(tok.StartPos, 1);
                 }
 
+                // Update the line and column count.
+                CurrentLine += tok.Text.Length - tok.Text.Replace("\n", "").Length;
+                tok.Line = CurrentLine;
+                if (tok.StartPos < Input.Length)
+                    tok.Column = tok.StartPos - Input.LastIndexOf('\n', tok.StartPos);
+
                 if (SkipList.Contains(tok.Type))
                 {
                     startpos = tok.EndPos;
@@ -289,6 +295,8 @@ namespace TinyPG
 
     public class Token
     {
+        private int line;
+        private int column;
         private int startpos;
         private int endpos;
         private string text;
@@ -296,6 +304,16 @@ namespace TinyPG
 
         // contains all prior skipped symbols
         private List<Token> skipped;
+
+        public int Line { 
+            get { return line; } 
+            set { line = value; }
+        }
+
+        public int Column {
+            get { return column; } 
+            set { column = value; }
+        }
 
         public int StartPos { 
             get { return startpos;} 
