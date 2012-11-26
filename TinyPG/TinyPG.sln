@@ -1,10 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyPG", "TinyPG.csproj", "{423B1883-6B35-401B-BB70-B7167F847575}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyPG.UnitTests", "..\TinyPG.UnitTests\TinyPG.UnitTests.csproj", "{F6842B95-BAAE-45AA-A9CA-A0F04C661FA3}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7FA2C29-76CA-4352-AF03-7CB6179F312A}"
 	ProjectSection(SolutionItems) = preProject
 		TinyPG.vsmdi = TinyPG.vsmdi
@@ -12,6 +8,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TinyPG2.vsmdi = TinyPG2.vsmdi
 		TinyPG3.vsmdi = TinyPG3.vsmdi
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyPG", "TinyPG.csproj", "{423B1883-6B35-401B-BB70-B7167F847575}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyPG.UnitTests", "..\TinyPG.UnitTests\TinyPG.UnitTests.csproj", "{F6842B95-BAAE-45AA-A9CA-A0F04C661FA3}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
