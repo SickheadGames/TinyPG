@@ -150,7 +150,7 @@ namespace TinyPG.Compiler
             object parserinstance = (IParser)assembly.CreateInstance("TinyPG.Debug.Parser", true, BindingFlags.CreateInstance, null, new object[] { scannerinstance }, null, null);
             Type parsertype = parserinstance.GetType();
 
-            object treeinstance = parsertype.InvokeMember("Parse", BindingFlags.InvokeMethod, null, parserinstance, new object[] { input });
+            object treeinstance = parsertype.InvokeMember("Parse", BindingFlags.InvokeMethod, null, parserinstance, new object[] { input, string.Empty });
             IParseTree itree = treeinstance as IParseTree;
             
             compilerresult.ParseTree = itree;
