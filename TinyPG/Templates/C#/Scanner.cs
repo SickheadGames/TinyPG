@@ -39,7 +39,7 @@ namespace <%Namespace%>
 <%RegExps%>
         }
 
-        public void Init(string input, string fileName = "")
+        public void Init(string input, string fileName)
         {
             this.Input = input;
             StartPos = 0;

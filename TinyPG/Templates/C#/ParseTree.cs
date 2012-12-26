@@ -45,7 +45,11 @@ namespace <%Namespace%>
         {
         }
 
-        public ParseError(string message, int code, string file = "", int line = 0, int col = 0, int pos = 0, int length = 0)
+        public ParseError(string message, int code) : this(message, code, string.Empty, 0, 0, 0, 0)
+        {
+        }
+
+        public ParseError(string message, int code, string file, int line, int col, int pos, int length)
         {
             this.file = file;
             this.message = message;
