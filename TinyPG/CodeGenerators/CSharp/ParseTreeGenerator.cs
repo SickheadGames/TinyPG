@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 using System.Text.RegularExpressions;
 
 namespace TinyPG.CodeGenerators.CSharp
 {
-    public class ParseTreeGenerator : ICodeGenerator
+    public class ParseTreeGenerator : BaseGenerator, ICodeGenerator
     {
         internal ParseTreeGenerator()
+            : base("ParseTree.cs")
         {
         }
 
-        public string FileName
-        {
-            get { return "ParseTree.cs"; }
-        }
 
         public string Generate(Grammar Grammar, bool Debug)
         {
@@ -25,7 +19,7 @@ namespace TinyPG.CodeGenerators.CSharp
                 return null;
 
             // copy the parse tree file (optionally)
-            string parsetree = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string parsetree = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             StringBuilder evalsymbols = new StringBuilder();
             StringBuilder evalmethods = new StringBuilder();
@@ -50,9 +44,7 @@ namespace TinyPG.CodeGenerators.CSharp
                     if (s.Name == "Start") // return a nice warning message from root object.
                         evalmethods.AppendLine("            return \"Could not interpret input; no semantics implemented.\";");
                     else
-                        evalmethods.AppendLine("            foreach (var node in Nodes)\r\n" +
-                                               "                node.Eval(tree, paramlist);\r\n" +
-                                               "            return null;");
+                        evalmethods.AppendLine("            throw new NotImplementedException();");
 
                     // otherwise simply not implemented!
                 }

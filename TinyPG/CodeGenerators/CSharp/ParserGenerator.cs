@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 
 namespace TinyPG.CodeGenerators.CSharp
 {
-    public class ParserGenerator : ICodeGenerator
+    public class ParserGenerator : BaseGenerator, ICodeGenerator
     {
         internal ParserGenerator()
+            : base("Parser.cs")
         {
-        }
-
-        public string FileName
-        {
-            get { return "Parser.cs"; }
         }
 
         public string Generate(Grammar Grammar, bool Debug)
@@ -25,7 +18,7 @@ namespace TinyPG.CodeGenerators.CSharp
 
             // generate the parser file
             StringBuilder parsers = new StringBuilder();
-            string parser = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string parser = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             // build non terminal tokens
             foreach (NonTerminalSymbol s in Grammar.GetNonTerminals())
@@ -94,7 +87,7 @@ namespace TinyPG.CodeGenerators.CSharp
                     sb.AppendLine(Indent + "node.Token.UpdateRange(tok);");
                     sb.AppendLine(Indent + "node.Nodes.Add(n);");
                     sb.AppendLine(Indent + "if (tok.Type != TokenType." + r.Symbol.Name + ") {");
-                    sb.AppendLine(Indent + "    tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found. Expected \" + TokenType." + r.Symbol.Name + ".ToString(), 0x1001, tok));");
+                    sb.AppendLine(Indent + "    tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found. Expected \" + TokenType." + r.Symbol.Name + ".ToString(), 0x1001, 0, tok.StartPos, tok.StartPos, tok.Length));");
                     sb.AppendLine(Indent + "    return;");
                     sb.AppendLine(Indent + "}");
                     break;
@@ -243,7 +236,7 @@ namespace TinyPG.CodeGenerators.CSharp
                         sb.AppendLine(Indent + "        break;");
                     }
                     sb.AppendLine(Indent + "    default:");
-                    sb.AppendLine(Indent + "        tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found.\", 0x0002, tok));");
+                    sb.AppendLine(Indent + "        tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found.\", 0x0002, 0, tok.StartPos, tok.StartPos, tok.Length));");
                     sb.AppendLine(Indent + "        break;");
                     sb.AppendLine(Indent + "}" + Helper.AddComment("Choice Rule"));
                     break;

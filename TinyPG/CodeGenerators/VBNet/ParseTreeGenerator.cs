@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 using System.Text.RegularExpressions;
 
 namespace TinyPG.CodeGenerators.VBNet
 {
-    public class ParseTreeGenerator : ICodeGenerator
+    public class ParseTreeGenerator : BaseGenerator, ICodeGenerator
     {
-        internal ParseTreeGenerator()
+        internal ParseTreeGenerator(): base( "ParseTree.vb")
         {
-        }
-
-        public string FileName
-        {
-            get { return "ParseTree.vb"; }
         }
 
         public string Generate(Grammar Grammar, bool Debug)
@@ -82,14 +74,14 @@ namespace TinyPG.CodeGenerators.VBNet
                 parsetree = parsetree.Replace(@"<%ImplementsIParseErrorLength%>", " Implements IParseError.Length");
                 parsetree = parsetree.Replace(@"<%ImplementsIParseErrorMessage%>", " Implements IParseError.Message");
 
-                string inodes =       "        Public Shared Function Node2INode(ByVal node As ParseNode) As IParseNode\r\n"
+                string inodes = "        Public Shared Function Node2INode(ByVal node As ParseNode) As IParseNode\r\n"
                                     + "            Return DirectCast(node, IParseNode)\r\n"
                                     + "        End Function\r\n\r\n"
                                     + "        Public ReadOnly Property INodes() As List(Of IParseNode) Implements IParseNode.INodes\r\n"
                                     + "            Get\r\n"
                                     + "                Return Nodes.ConvertAll(Of IParseNode)(New Converter(Of ParseNode, IParseNode)(AddressOf Node2INode))\r\n"
                                     + "            End Get\r\n"
-                                    + "        End Property\r\n"; 
+                                    + "        End Property\r\n";
                 parsetree = parsetree.Replace(@"<%INodesGet%>", inodes);
                 parsetree = parsetree.Replace(@"<%ImplementsIParseNodeText%>", " Implements IParseNode.Text");
 

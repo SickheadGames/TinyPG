@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 
 namespace TinyPG.CodeGenerators.VBNet
 {
-    public class ScannerGenerator : ICodeGenerator
+    public class ScannerGenerator : BaseGenerator, ICodeGenerator
     {
-        internal ScannerGenerator()
+        internal ScannerGenerator() : base("Scanner.vb")
         {
-        }
-
-        public string FileName
-        {
-            get { return "Scanner.vb"; }
         }
 
         public string Generate(Grammar Grammar, bool Debug)
