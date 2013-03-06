@@ -22,5 +22,5 @@ These are the new features and fixes we have added to the original code:
  - Regex tool now updates live without flicker.
  - The IDE will now display the error line number in the output.
  - Production rules without a code block will by default evaluate their sub-rules.
- - New 'FileAndLine' attribute for redefining the file and line number reported in errors.
+ - New `[FileAndLine]` flag for redefining the file and line number reported in errors.
  - IDE now uses C# 3.x compiler when testing the generated parser code.
