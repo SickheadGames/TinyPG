@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 
 namespace TinyPG.CodeGenerators.CSharp
 {
-    public class ScannerGenerator : ICodeGenerator
+    public class ScannerGenerator : BaseGenerator, ICodeGenerator
     {
         internal ScannerGenerator()
+             : base("Scanner.cs")
         {
-        }
-
-        public string FileName
-        {
-            get { return "Scanner.cs"; }
         }
 
         public string Generate(Grammar Grammar, bool Debug)
@@ -23,7 +17,7 @@ namespace TinyPG.CodeGenerators.CSharp
             if (string.IsNullOrEmpty(Grammar.GetTemplatePath()))
                 return null;
 
-            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             int counter = 2;
             StringBuilder tokentype = new StringBuilder();
@@ -34,9 +28,6 @@ namespace TinyPG.CodeGenerators.CSharp
             {
                 skiplist.AppendLine("            SkipList.Add(TokenType." + s.Name + ");");
             }
-
-            if (Grammar.FileAndLine != null)
-                skiplist.AppendLine("            FileAndLine = TokenType." + Grammar.FileAndLine.Name + ";");
 
             // build system tokens
             tokentype.AppendLine("\r\n            //Non terminal tokens:");
@@ -56,13 +47,7 @@ namespace TinyPG.CodeGenerators.CSharp
             bool first = true;
             foreach (TerminalSymbol s in Grammar.GetTerminals())
             {
-                regexps.Append("            regex = new Regex(" + s.Expression.ToString() + ", RegexOptions.Compiled");
-
-                if (s.Attributes.ContainsKey("IgnoreCase"))
-                    regexps.Append(" | RegexOptions.IgnoreCase");
-                
-                regexps.Append(");\r\n");                    
-
+                regexps.Append("            regex = new Regex(" + s.Expression.ToString() + ", RegexOptions.Compiled);\r\n");
                 regexps.Append("            Patterns.Add(TokenType." + s.Name + ", regex);\r\n");
                 regexps.Append("            Tokens.Add(TokenType." + s.Name + ");\r\n\r\n");
 
