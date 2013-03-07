@@ -660,6 +660,9 @@ namespace TinyPG
                 foreach (Directive d in grammar.Directives)
                 {
                     generator = CodeGeneratorFactory.CreateGenerator(d.Name, language);
+                    if (generator != null && d.ContainsKey("FileName"))
+                        generator.FileName = d["FileName"];
+
                     if (generator != null && d["Generate"].ToLower() == "true")
                         File.WriteAllText(grammar.GetOutputPath() + generator.FileName, generator.Generate(grammar, false));
                 }

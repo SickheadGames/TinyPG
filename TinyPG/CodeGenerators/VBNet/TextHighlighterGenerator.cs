@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 
 namespace TinyPG.CodeGenerators.VBNet
 {
-    public class TextHighlighterGenerator : ICodeGenerator
+    public class TextHighlighterGenerator : BaseGenerator, ICodeGenerator
     {
         internal TextHighlighterGenerator()
+            : base("TextHighlighter.vb")
         {
-        }
-
-        public string FileName
-        {
-            get { return "TextHighlighter.vb"; }
         }
 
         public string Generate(Grammar Grammar, bool Debug)
@@ -23,7 +17,7 @@ namespace TinyPG.CodeGenerators.VBNet
             if (string.IsNullOrEmpty(Grammar.GetTemplatePath()))
                 return null;
 
-            string generatedtext = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string generatedtext = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
             StringBuilder tokens = new StringBuilder();
             StringBuilder colors = new StringBuilder();
 

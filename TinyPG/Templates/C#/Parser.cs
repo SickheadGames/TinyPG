@@ -17,13 +17,17 @@ namespace <%Namespace%>
             this.scanner = scanner;
         }
 
-        public <%IParseTree%> Parse(string input, string fileName)
+         public <%IParseTree%> Parse(string input)
         {
-            tree = new ParseTree();
-            return Parse(input, fileName, tree);
+            return Parse(input, "", new ParseTree());
         }
 
-        public ParseTree Parse(string input, string fileName, ParseTree tree)
+        public <%IParseTree%> Parse(string input, string fileName)
+        {
+            return Parse(input, fileName, new ParseTree());
+        }
+
+        public <%IParseTree%> Parse(string input, string fileName, ParseTree tree)
         {
             scanner.Init(input, fileName);
 
