@@ -39,6 +39,11 @@ namespace <%Namespace%>
 <%RegExps%>
         }
 
+        public void Init(string input)
+        {
+            Init(input, "");
+        }
+
         public void Init(string input, string fileName)
         {
             this.Input = input;
