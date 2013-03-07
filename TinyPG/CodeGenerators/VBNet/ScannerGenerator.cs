@@ -7,7 +7,8 @@ namespace TinyPG.CodeGenerators.VBNet
 {
     public class ScannerGenerator : BaseGenerator, ICodeGenerator
     {
-        internal ScannerGenerator() : base("Scanner.vb")
+        internal ScannerGenerator()
+            : base("Scanner.vb")
         {
         }
 
@@ -16,7 +17,7 @@ namespace TinyPG.CodeGenerators.VBNet
             if (string.IsNullOrEmpty(Grammar.GetTemplatePath()))
                 return null;
 
-            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             int counter = 2;
             StringBuilder tokentype = new StringBuilder();
@@ -74,7 +75,7 @@ namespace TinyPG.CodeGenerators.VBNet
                 scanner = scanner.Replace(@"<%ImplementsITokenLength%>", " Implements IToken.Length");
                 scanner = scanner.Replace(@"<%ImplementsITokenText%>", " Implements IToken.Text");
                 scanner = scanner.Replace(@"<%ImplementsITokenToString%>", " Implements IToken.ToString");
-                
+
             }
             else
             {

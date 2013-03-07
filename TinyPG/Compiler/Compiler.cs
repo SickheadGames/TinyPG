@@ -9,11 +9,8 @@
 //-----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using CodeDom = System.CodeDom.Compiler;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 using TinyPG.CodeGenerators;
 using TinyPG.Debug;
@@ -102,7 +99,7 @@ namespace TinyPG.Compiler
             // reference this assembly to share interfaces (for debugging only)
 
             string tinypgfile = Assembly.GetExecutingAssembly().Location;
-            compilerparams.ReferencedAssemblies.Add(tinypgfile); 
+            compilerparams.ReferencedAssemblies.Add(tinypgfile);
 
             // generate the code with debug interface enabled
             List<string> sources = new List<string>();
@@ -155,7 +152,7 @@ namespace TinyPG.Compiler
 
             object treeinstance = parsertype.InvokeMember("Parse", BindingFlags.InvokeMethod, null, parserinstance, new object[] { input, string.Empty });
             IParseTree itree = treeinstance as IParseTree;
-            
+
             compilerresult.ParseTree = itree;
             Type treetype = treeinstance.GetType();
 

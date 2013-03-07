@@ -7,7 +7,8 @@ namespace TinyPG.CodeGenerators.VBNet
 {
     public class ParseTreeGenerator : BaseGenerator, ICodeGenerator
     {
-        internal ParseTreeGenerator(): base( "ParseTree.vb")
+        internal ParseTreeGenerator()
+            : base("ParseTree.vb")
         {
         }
 
@@ -17,7 +18,7 @@ namespace TinyPG.CodeGenerators.VBNet
                 return null;
 
             // copy the parse tree file (optionally)
-            string parsetree = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string parsetree = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             StringBuilder evalsymbols = new StringBuilder();
             StringBuilder evalmethods = new StringBuilder();

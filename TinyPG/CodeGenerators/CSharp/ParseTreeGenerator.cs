@@ -12,7 +12,6 @@ namespace TinyPG.CodeGenerators.CSharp
         {
         }
 
-
         public string Generate(Grammar Grammar, bool Debug)
         {
             if (string.IsNullOrEmpty(Grammar.GetTemplatePath()))
@@ -44,7 +43,9 @@ namespace TinyPG.CodeGenerators.CSharp
                     if (s.Name == "Start") // return a nice warning message from root object.
                         evalmethods.AppendLine("            return \"Could not interpret input; no semantics implemented.\";");
                     else
-                        evalmethods.AppendLine("            throw new NotImplementedException();");
+                        evalmethods.AppendLine("            foreach (var node in Nodes)\r\n" +
+                                               "                node.Eval(tree, paramlist);\r\n" +
+                                               "            return null;");
 
                     // otherwise simply not implemented!
                 }

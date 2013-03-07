@@ -2,12 +2,12 @@
 using System.IO;
 using TinyPG.Compiler;
 
-
 namespace TinyPG.CodeGenerators.VBNet
 {
     public class ParserGenerator : BaseGenerator, ICodeGenerator
     {
-        internal ParserGenerator() : base( "Parser.vb")
+        internal ParserGenerator()
+            : base("Parser.vb")
         {
         }
 
@@ -18,7 +18,7 @@ namespace TinyPG.CodeGenerators.VBNet
 
             // generate the parser file
             StringBuilder parsers = new StringBuilder();
-            string parser = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string parser = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             // build non terminal tokens
             foreach (NonTerminalSymbol s in Grammar.GetNonTerminals())
@@ -86,7 +86,7 @@ namespace TinyPG.CodeGenerators.VBNet
                     sb.AppendLine(Indent + "node.Token.UpdateRange(tok)");
                     sb.AppendLine(Indent + "node.Nodes.Add(n)");
                     sb.AppendLine(Indent + "If tok.Type <> TokenType." + r.Symbol.Name + " Then");
-                    sb.AppendLine(Indent + "    m_tree.Errors.Add(New ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found. Expected \" + TokenType." + r.Symbol.Name + ".ToString(), &H1001, 0, tok.StartPos, tok.StartPos, tok.EndPos - tok.StartPos))");
+                    sb.AppendLine(Indent + "    m_tree.Errors.Add(New ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found. Expected \" + TokenType." + r.Symbol.Name + ".ToString(), &H1001, tok))");
                     sb.AppendLine(Indent + "    Return\r\n");
                     sb.AppendLine(Indent + "End If\r\n");
                     break;
@@ -233,7 +233,7 @@ namespace TinyPG.CodeGenerators.VBNet
                         }
                     }
                     sb.AppendLine(Indent + "    Case Else");
-                    sb.AppendLine(Indent + "        m_tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found.\", &H0002, 0, tok.StartPos, tok.StartPos, tok.EndPos - tok.StartPos))");
+                    sb.AppendLine(Indent + "        m_tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found.\", &H0002, tok))");
                     sb.AppendLine(Indent + "        Exit Select");
                     sb.AppendLine(Indent + "End Select" + Helper.AddComment("'", "Choice Rule"));
                     break;

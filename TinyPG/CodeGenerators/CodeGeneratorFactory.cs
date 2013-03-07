@@ -75,7 +75,7 @@ namespace TinyPG.CodeGenerators
                 case "vb":
                     return new Microsoft.VisualBasic.VBCodeProvider();
                 default:
-                    return new Microsoft.CSharp.CSharpCodeProvider();
+                    return new Microsoft.CSharp.CSharpCodeProvider(new Dictionary<string, string> { { "CompilerVersion", "v3.5" } });
             }
         }
     }

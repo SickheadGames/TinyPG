@@ -5,9 +5,10 @@ using TinyPG.Compiler;
 
 namespace TinyPG.CodeGenerators.VBNet
 {
-    public class TextHighlighterGenerator : BaseGenerator,ICodeGenerator
+    public class TextHighlighterGenerator : BaseGenerator, ICodeGenerator
     {
-        internal TextHighlighterGenerator() : base("TextHighlighter.vb")
+        internal TextHighlighterGenerator()
+            : base("TextHighlighter.vb")
         {
         }
 
@@ -16,7 +17,7 @@ namespace TinyPG.CodeGenerators.VBNet
             if (string.IsNullOrEmpty(Grammar.GetTemplatePath()))
                 return null;
 
-            string generatedtext = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string generatedtext = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
             StringBuilder tokens = new StringBuilder();
             StringBuilder colors = new StringBuilder();
 

@@ -8,7 +8,7 @@ namespace TinyPG.CodeGenerators.CSharp
     public class ScannerGenerator : BaseGenerator, ICodeGenerator
     {
         internal ScannerGenerator()
-             : base("Scanner.cs")
+            : base("Scanner.cs")
         {
         }
 
@@ -29,6 +29,9 @@ namespace TinyPG.CodeGenerators.CSharp
                 skiplist.AppendLine("            SkipList.Add(TokenType." + s.Name + ");");
             }
 
+            if (Grammar.FileAndLine != null)
+                skiplist.AppendLine("            FileAndLine = TokenType." + Grammar.FileAndLine.Name + ";");
+
             // build system tokens
             tokentype.AppendLine("\r\n            //Non terminal tokens:");
             tokentype.AppendLine(Helper.Outline("_NONE_", 3, "= 0,", 5));
@@ -47,7 +50,13 @@ namespace TinyPG.CodeGenerators.CSharp
             bool first = true;
             foreach (TerminalSymbol s in Grammar.GetTerminals())
             {
-                regexps.Append("            regex = new Regex(" + s.Expression.ToString() + ", RegexOptions.Compiled);\r\n");
+                regexps.Append("            regex = new Regex(" + s.Expression.ToString() + ", RegexOptions.Compiled");
+
+                if (s.Attributes.ContainsKey("IgnoreCase"))
+                    regexps.Append(" | RegexOptions.IgnoreCase");
+
+                regexps.Append(");\r\n");
+
                 regexps.Append("            Patterns.Add(TokenType." + s.Name + ", regex);\r\n");
                 regexps.Append("            Tokens.Add(TokenType." + s.Name + ");\r\n\r\n");
 
