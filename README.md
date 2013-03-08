@@ -24,3 +24,10 @@ These are the new features and fixes we have added to the original code:
  - Production rules without a code block will by default evaluate their sub-rules.
  - New `[FileAndLine]` flag for redefining the file and line number reported in errors.
  - IDE now uses C# 3.x compiler when testing the generated parser code.
+
+
+### Downloads
+
+The latest source code can be found in [zip form here](https://github.com/SickheadGames/TinyPG/archive/master.zip).
+
+The latest binaries can be found in the [build artifacts](http://teamcity.sickhead.com/viewType.html?buildTypeId=bt15&branch_project5=master).
