@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 
 namespace TinyPG.CodeGenerators.CSharp
 {
-    public class ScannerGenerator : ICodeGenerator
+    public class ScannerGenerator : BaseGenerator, ICodeGenerator
     {
         internal ScannerGenerator()
+            : base("Scanner.cs")
         {
-        }
-
-        public string FileName
-        {
-            get { return "Scanner.cs"; }
         }
 
         public string Generate(Grammar Grammar, bool Debug)
@@ -23,7 +17,7 @@ namespace TinyPG.CodeGenerators.CSharp
             if (string.IsNullOrEmpty(Grammar.GetTemplatePath()))
                 return null;
 
-            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             int counter = 2;
             StringBuilder tokentype = new StringBuilder();
@@ -60,8 +54,8 @@ namespace TinyPG.CodeGenerators.CSharp
 
                 if (s.Attributes.ContainsKey("IgnoreCase"))
                     regexps.Append(" | RegexOptions.IgnoreCase");
-                
-                regexps.Append(");\r\n");                    
+
+                regexps.Append(");\r\n");
 
                 regexps.Append("            Patterns.Add(TokenType." + s.Name + ", regex);\r\n");
                 regexps.Append("            Tokens.Add(TokenType." + s.Name + ");\r\n\r\n");

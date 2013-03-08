@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 
 namespace TinyPG.CodeGenerators.VBNet
 {
-    public class ScannerGenerator : ICodeGenerator
+    public class ScannerGenerator : BaseGenerator, ICodeGenerator
     {
         internal ScannerGenerator()
+            : base("Scanner.vb")
         {
-        }
-
-        public string FileName
-        {
-            get { return "Scanner.vb"; }
         }
 
         public string Generate(Grammar Grammar, bool Debug)
@@ -23,7 +17,7 @@ namespace TinyPG.CodeGenerators.VBNet
             if (string.IsNullOrEmpty(Grammar.GetTemplatePath()))
                 return null;
 
-            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             int counter = 2;
             StringBuilder tokentype = new StringBuilder();
@@ -81,7 +75,7 @@ namespace TinyPG.CodeGenerators.VBNet
                 scanner = scanner.Replace(@"<%ImplementsITokenLength%>", " Implements IToken.Length");
                 scanner = scanner.Replace(@"<%ImplementsITokenText%>", " Implements IToken.Text");
                 scanner = scanner.Replace(@"<%ImplementsITokenToString%>", " Implements IToken.ToString");
-                
+
             }
             else
             {

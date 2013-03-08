@@ -13,7 +13,7 @@ namespace TinyPG.CodeGenerators
         /// the target filename where the output of Generate should be stored. This value
         /// must be implemented by the implementing class
         /// </summary>
-        string FileName { get; }
+        string FileName { get; set; }
 
         /// <summary>
         /// Generates an output file based on the grammar

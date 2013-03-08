@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.IO;
-using TinyPG;
 using TinyPG.Compiler;
 
 namespace TinyPG.CodeGenerators.VBNet
 {
-    public class ParserGenerator : ICodeGenerator
+    public class ParserGenerator : BaseGenerator, ICodeGenerator
     {
         internal ParserGenerator()
+            : base("Parser.vb")
         {
-        }
-
-        public string FileName
-        {
-            get { return "Parser.vb"; }
         }
 
         public string Generate(Grammar Grammar, bool Debug)
@@ -25,7 +18,7 @@ namespace TinyPG.CodeGenerators.VBNet
 
             // generate the parser file
             StringBuilder parsers = new StringBuilder();
-            string parser = File.ReadAllText(Grammar.GetTemplatePath() + FileName);
+            string parser = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
 
             // build non terminal tokens
             foreach (NonTerminalSymbol s in Grammar.GetNonTerminals())

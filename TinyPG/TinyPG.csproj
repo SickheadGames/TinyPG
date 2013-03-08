@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeGenerators\BaseGenerator.cs" />
     <Compile Include="CodeGenerators\CodeGeneratorFactory.cs" />
     <Compile Include="CodeGenerators\ICodeGenerator.cs" />
     <Compile Include="CodeGenerators\CSharp\ParserGenerator.cs" />
