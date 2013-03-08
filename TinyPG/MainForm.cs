@@ -595,14 +595,14 @@ namespace TinyPG
             // clear tree
             tvParsetree.Nodes.Clear();
 
-            Program prog = new Program(ManageParseError);
+            Program prog = new Program(ManageParseError, output);
             DateTime starttimer = DateTime.Now;
-            grammar = prog.ParseGrammar(textEditor.Text, GrammarFile, output);
+            grammar = prog.ParseGrammar(textEditor.Text, GrammarFile);
 
             if (grammar != null)
             {
                 SetHighlighterLanguage(grammar.Directives["TinyPG"]["Language"]);
-                prog.BuildCode(grammar, compiler, output);
+                prog.BuildCode(grammar, compiler);
                 
                 TimeSpan span = DateTime.Now.Subtract(starttimer);
                 output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");

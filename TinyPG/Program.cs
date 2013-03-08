@@ -67,13 +67,16 @@ namespace TinyPG
         private OnParseErrorDelegate parseErrorDelegate;
         private StringBuilder output;
 
-        public Program(OnParseErrorDelegate parseErrorDelegate)
+
+        StringBuilder Output { get{return this.output} }
+
+        public Program(OnParseErrorDelegate parseErrorDelegate, StringBuilder output)
         {
             this.parseErrorDelegate = parseErrorDelegate;
-            this.output = new StringBuilder(string.Empty);
+            this.output = output;
         }
 
-        public Grammar ParseGrammar(string input, string grammarFile, StringBuilder output)
+        public Grammar ParseGrammar(string input, string grammarFile)
         {
             Grammar grammar = null;
             Scanner scanner = new Scanner();
@@ -83,7 +86,7 @@ namespace TinyPG
 
             if (tree.Errors.Count > 0)
             {
-                this.parseErrorDelegate(tree, output);
+                this.parseErrorDelegate(tree, this.output);
             }
             else
             {
@@ -93,26 +96,26 @@ namespace TinyPG
 
                 if (tree.Errors.Count == 0)
                 {
-                    output.AppendLine(grammar.PrintGrammar());
-                    output.AppendLine(grammar.PrintFirsts());
+                    this.output.AppendLine(grammar.PrintGrammar());
+                    this.output.AppendLine(grammar.PrintFirsts());
 
-                    output.AppendLine("Parse successful!\r\n");
+                    this.output.AppendLine("Parse successful!\r\n");
                 }
             }
             return grammar;
         }
 
 
-        public void BuildCode(Grammar grammar, TinyPG.Compiler.Compiler compiler, StringBuilder output)
+        public void BuildCode(Grammar grammar, TinyPG.Compiler.Compiler compiler)
         {
 
-            output.AppendLine("Building code...");
+            this.output.AppendLine("Building code...");
             compiler.Compile(grammar);
             if (!compiler.IsCompiled)
             {
                 foreach (string err in compiler.Errors)
-                    output.AppendLine(err);
-                output.AppendLine("Compilation contains errors, could not compile.");
+                    this.output.AppendLine(err);
+                this.output.AppendLine("Compilation contains errors, could not compile.");
             }
             else
             {
