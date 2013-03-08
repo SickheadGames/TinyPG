@@ -15,36 +15,43 @@ using System.Text;
 
 namespace TinyPG
 {
-    class Program
+    public class Program
     {
+        public enum ExitCode : int
+        {
+            Success = 0,
+            InvalidFilename = 1,
+            UnknownError = 10
+        }
 
         [STAThread]
-        static void Main()
+        public static int Main(string[] args)
         {
-            var args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
+            //var args = Environment.GetCommandLineArgs();
+            if (args.Length > 0)
             {
+                string GrammarFilePath = args[0];
                 StringBuilder output = new StringBuilder(string.Empty);
-                if (File.Exists(args[1]))
+                if (!File.Exists(GrammarFilePath))
                 {
-                    //As stated in documentation current directory is which of TPG file.
-                    Directory.SetCurrentDirectory(Path.GetDirectoryName(args[1]));
-                    DateTime starttimer = DateTime.Now;
-
-                    Program prog = new Program(ManageParseError);
-                    Grammar grammar = prog.ParseGrammar(System.IO.File.ReadAllText(args[1]), args[1], output);
-                    if (grammar != null)
-                    {
-                        prog.BuildCode(grammar, new TinyPG.Compiler.Compiler(), output);
-
-                        TimeSpan span = DateTime.Now.Subtract(starttimer);
-                        output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");
-                    }
+                    output.Append("Specified file " + GrammarFilePath + " does not exists");
+                    Console.WriteLine(output.ToString());
+                    return (int)ExitCode.InvalidFilename;
                 }
-                else
+
+                //As stated in documentation current directory is which of TPG file.
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(GrammarFilePath));
+                DateTime starttimer = DateTime.Now;
+
+                Program prog = new Program(ManageParseError, output);
+                Grammar grammar = prog.ParseGrammar(System.IO.File.ReadAllText(GrammarFilePath), Path.GetFileName(GrammarFilePath));
+                
+                if (grammar != null && prog.BuildCode(grammar, new TinyPG.Compiler.Compiler()))
                 {
-                    output.Append("Specified file " + args[1] + " does not exists");
+                    TimeSpan span = DateTime.Now.Subtract(starttimer);
+                    output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");
                 }
+
                 Console.WriteLine(output.ToString());
             }
             else
@@ -54,7 +61,7 @@ namespace TinyPG
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm());
             }
-            return;
+            return (int)ExitCode.Success;
         }
 
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
@@ -63,12 +70,9 @@ namespace TinyPG
         }
 
         public delegate void OnParseErrorDelegate(ParseTree tree, StringBuilder output);
-
         private OnParseErrorDelegate parseErrorDelegate;
         private StringBuilder output;
-
-
-        StringBuilder Output { get{return this.output} }
+        public StringBuilder Output { get { return this.output; } }
 
         public Program(OnParseErrorDelegate parseErrorDelegate, StringBuilder output)
         {
@@ -90,7 +94,6 @@ namespace TinyPG
             }
             else
             {
-
                 grammar = (Grammar)tree.Eval();
                 grammar.Preprocess();
 
@@ -106,7 +109,7 @@ namespace TinyPG
         }
 
 
-        public void BuildCode(Grammar grammar, TinyPG.Compiler.Compiler compiler)
+        public bool BuildCode(Grammar grammar, TinyPG.Compiler.Compiler compiler)
         {
 
             this.output.AppendLine("Building code...");
@@ -122,9 +125,10 @@ namespace TinyPG
                 new GeneratedFilesWriter(grammar).Generate(false);
             }
 
+            return compiler.IsCompiled;
         }
 
-        public static void ManageParseError(ParseTree tree, StringBuilder output)
+        protected static void ManageParseError(ParseTree tree, StringBuilder output)
         {
             foreach (ParseError error in tree.Errors)
                 output.AppendLine(string.Format("({0},{1}): {2}", error.Line, error.Column, error.Message));

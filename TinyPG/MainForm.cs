@@ -602,10 +602,12 @@ namespace TinyPG
             if (grammar != null)
             {
                 SetHighlighterLanguage(grammar.Directives["TinyPG"]["Language"]);
-                prog.BuildCode(grammar, compiler);
-                
-                TimeSpan span = DateTime.Now.Subtract(starttimer);
-                output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");
+
+                if (prog.BuildCode(grammar, compiler))
+                {
+                    TimeSpan span = DateTime.Now.Subtract(starttimer);
+                    output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");
+                }
             }
 
             textOutput.Text = output.ToString();
