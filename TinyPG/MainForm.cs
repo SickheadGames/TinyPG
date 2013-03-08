@@ -8,7 +8,6 @@
 // LIABILITY FOR ANY DATA DAMAGE/LOSS THAT THIS PRODUCT MAY CAUSE.
 //-----------------------------------------------------------------------
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Text;
 using System.IO;
@@ -28,7 +27,7 @@ namespace TinyPG
         private TinyPG.Compiler.Compiler compiler;
         Grammar grammar;
 
-        
+
         // indicates if text/grammar has changed
         private bool IsDirty;
 
@@ -71,7 +70,7 @@ namespace TinyPG
         #region Initialization
         public MainForm()
         {
-            
+
             InitializeComponent();
             IsDirty = false;
             compiler = null;
@@ -95,11 +94,11 @@ namespace TinyPG
             outputFloaty.Docking += new EventHandler(inputFloaty_Docking);
             inputFloaty.Hide();
             outputFloaty.Hide();
-            
+
             textOutput.Text = AssemblyInfo.ProductName + " v" + Application.ProductVersion + "\r\n";
             textOutput.Text += AssemblyInfo.CopyRightsDetail + "\r\n\r\n";
 
-            
+
             marker = new TextMarker(textEditor);
             checker = new SyntaxChecker(marker); // run the syntax checker on seperate thread
 
@@ -133,7 +132,7 @@ namespace TinyPG
             highlighterScanner = new TinyPG.Highlighter.Scanner();
             textHighlighter = new TinyPG.Highlighter.TextHighlighter(textEditor, highlighterScanner, new TinyPG.Highlighter.Parser(highlighterScanner));
             textHighlighter.SwitchContext += new TinyPG.Highlighter.ContextSwitchEventHandler(TextHighlighter_SwitchContext);
-            
+
             LoadConfig();
 
             if (GrammarFile == null)
@@ -152,13 +151,13 @@ namespace TinyPG
         /// <param name="e"></param>
         void TextHighlighter_SwitchContext(object sender, TinyPG.Highlighter.ContextSwitchEventArgs e)
         {
-           
+
             if (e.NewContext.Token.Type == TinyPG.Highlighter.TokenType.DOTNET_COMMENTBLOCK
                 || e.NewContext.Token.Type == TinyPG.Highlighter.TokenType.DOTNET_COMMENTLINE
                 || e.NewContext.Token.Type == TinyPG.Highlighter.TokenType.DOTNET_STRING
                 || e.NewContext.Token.Type == TinyPG.Highlighter.TokenType.GRAMMARSTRING
                 || e.NewContext.Token.Type == TinyPG.Highlighter.TokenType.DIRECTIVESTRING
-                || e.NewContext.Token.Type == TinyPG.Highlighter.TokenType.GRAMMARCOMMENTBLOCK 
+                || e.NewContext.Token.Type == TinyPG.Highlighter.TokenType.GRAMMARCOMMENTBLOCK
                 || e.NewContext.Token.Type == TinyPG.Highlighter.TokenType.GRAMMARCOMMENTLINE)
             {
                 codecomplete.Enabled = false; // disable autocompletion if user is editing in any of these blocks
@@ -176,7 +175,7 @@ namespace TinyPG
             }
             else
             {
-                codecomplete.Enabled = false; 
+                codecomplete.Enabled = false;
                 directivecomplete.Enabled = false;
             }
 
@@ -193,9 +192,9 @@ namespace TinyPG
 
             if (checker.Grammar == null) return;
 
-            if (codecomplete.Visible) 
+            if (codecomplete.Visible)
                 return;
-            
+
             lock (checker.Grammar)
             {
                 bool startAdded = false;
@@ -203,7 +202,7 @@ namespace TinyPG
                 foreach (Symbol s in checker.Grammar.Symbols)
                 {
                     codecomplete.WordList.Items.Add(s.Name);
-                    if (s.Name == "Start") 
+                    if (s.Name == "Start")
                         startAdded = true;
                 }
                 if (!startAdded)
@@ -240,7 +239,7 @@ namespace TinyPG
 
         private void menuToolsGenerate_Click(object sender, EventArgs e)
         {
-            
+
             outputFloaty.Show();
             tabOutput.SelectedIndex = 0;
 
@@ -285,7 +284,7 @@ namespace TinyPG
             TextChangedTimer.Stop();
 
             textEditor.Invalidate();
-            checker.Check(textEditor.Text);                        
+            checker.Check(textEditor.Text);
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -341,7 +340,7 @@ namespace TinyPG
 
         private void tvParsetree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (e.Node == null) 
+            if (e.Node == null)
                 return;
 
             IParseNode ipn = e.Node.Tag as IParseNode;
@@ -572,9 +571,17 @@ namespace TinyPG
 
         }
 
+        private void ManageParseError(ParseTree tree, StringBuilder output)
+        {
+            foreach (ParseError error in tree.Errors)
+                output.AppendLine(string.Format("({0},{1}): {2}", error.Line, error.Column, error.Message));
+
+            output.AppendLine("Semantic errors in grammar found.");
+            textEditor.Select(tree.Errors[0].Position, tree.Errors[0].Length > 0 ? tree.Errors[0].Length : 1);
+        }
+
         private void CompileGrammar()
         {
-            DateTime starttimer = DateTime.Now;
 
             if (string.IsNullOrEmpty(GrammarFile))
                 SaveGrammarAs();
@@ -588,85 +595,23 @@ namespace TinyPG
             // clear tree
             tvParsetree.Nodes.Clear();
 
-            string input = textEditor.Text;
-            Scanner scanner = new Scanner();
-            Parser parser = new Parser(scanner);
-            ParseTree tree = parser.Parse(input, GrammarFile, new GrammarTree());
-
-            if (tree.Errors.Count > 0)
-            {
-                foreach (ParseError error in tree.Errors)
-                    output.AppendLine(string.Format("({0},{1}): {2}", error.Line, error.Column, error.Message));
-                output.AppendLine("Syntax errors in grammar found.");
-
-                if (tree.Errors.Count > 0)
-                    textEditor.Select(tree.Errors[0].Position, tree.Errors[0].Length > 0 ? tree.Errors[0].Length : 1);
-            }
-            else
-            {
-
-                grammar = (Grammar)tree.Eval();
-                grammar.Preprocess();
-
-                if (tree.Errors.Count == 0)
-                {
-                    output.AppendLine(grammar.PrintGrammar());
-                    output.AppendLine(grammar.PrintFirsts());
-
-                    output.AppendLine("Parse successful!\r\n");
-                }
-            }
+            Program prog = new Program(ManageParseError);
+            DateTime starttimer = DateTime.Now;
+            grammar = prog.ParseGrammar(textEditor.Text, GrammarFile, output);
 
             if (grammar != null)
             {
                 SetHighlighterLanguage(grammar.Directives["TinyPG"]["Language"]);
-                if (tree.Errors.Count > 0)
-                {
-                    foreach (ParseError error in tree.Errors)
-                        output.AppendLine(string.Format("({0},{1}): {2}", error.Line, error.Column, error.Message));
-                    output.AppendLine("Semantic errors in grammar found.");
-                    if (tree.Errors.Count > 0)
-                        textEditor.Select(tree.Errors[0].Position, tree.Errors[0].Length > 0 ? tree.Errors[0].Length : 1);
-
-                }
-                else
-                {
-                    output.AppendLine("Building code...");
-                    compiler.Compile(grammar);
-                    if (!compiler.IsCompiled)
-                    {
-                        foreach (string err in compiler.Errors)
-                            output.AppendLine(err);
-                        output.AppendLine("Compilation contains errors, could not compile.");
-                    }
-                    else
-                    {
-                        TimeSpan span = DateTime.Now.Subtract(starttimer);
-                        output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");
-
-                    }
-                }
+                prog.BuildCode(grammar, compiler, output);
+                
+                TimeSpan span = DateTime.Now.Subtract(starttimer);
+                output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");
             }
+
             textOutput.Text = output.ToString();
             textOutput.Select(textOutput.Text.Length, 0);
             textOutput.ScrollToCaret();
 
-
-            if (grammar != null && tree.Errors.Count == 0)
-            {
-                ICodeGenerator generator;
-
-                string language = grammar.Directives["TinyPG"]["Language"];
-                foreach (Directive d in grammar.Directives)
-                {
-                    generator = CodeGeneratorFactory.CreateGenerator(d.Name, language);
-                    if (generator != null && d.ContainsKey("FileName"))
-                        generator.FileName = d["FileName"];
-
-                    if (generator != null && d["Generate"].ToLower() == "true")
-                        File.WriteAllText(grammar.GetOutputPath() + generator.FileName, generator.Generate(grammar, false));
-                }
-            }
         }
 
         private void AboutTinyPG()
@@ -749,7 +694,7 @@ namespace TinyPG
             textEditor.Select(0, 0);
             checker.Check(textEditor.Text);
 
-            
+
         }
 
         private void SaveGrammarAs()
