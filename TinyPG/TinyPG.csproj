@@ -81,6 +81,7 @@
     <Compile Include="Debug\IParser.cs" />
     <Compile Include="Debug\IParseTree.cs" />
     <Compile Include="Debug\IToken.cs" />
+    <Compile Include="GeneratedFilesWriter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Highlighter\Parser.cs" />
     <Compile Include="Highlighter\ParseTree.cs" />

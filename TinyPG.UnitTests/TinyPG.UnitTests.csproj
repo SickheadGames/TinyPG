@@ -43,6 +43,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProgramTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ParserTester.cs" />
   </ItemGroup>
