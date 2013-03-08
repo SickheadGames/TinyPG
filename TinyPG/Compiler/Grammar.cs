@@ -219,7 +219,7 @@ namespace TinyPG.Compiler
             if (Path.IsPathRooted(pathout))
                 folder = Path.GetFullPath(pathout);
             else
-                folder = Path.GetFullPath(folder + pathout);
+                folder = Path.GetFullPath(Path.Combine(folder, pathout));
 
 
             DirectoryInfo dir = new DirectoryInfo(folder + @"\");
