@@ -155,8 +155,6 @@ namespace TinyPG.Compiler
             if (!d.ContainsKey("OutputPath"))
                 d["OutputPath"] = "./"; // write files to current path
             if (!d.ContainsKey("Language"))
-                d["OutputPath"] = "C#"; // write files to current path
-            if (!d.ContainsKey("Language"))
                 d["Language"] = "C#"; // set default language
             if (!d.ContainsKey("TemplatePath"))
             {
