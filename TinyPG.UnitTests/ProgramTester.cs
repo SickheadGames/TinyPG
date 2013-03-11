@@ -8,7 +8,8 @@ using TinyPG.Compiler;
 namespace TinyPG.UnitTests
 {
     /// <summary>
-    /// Summary description for ProgramTester
+    /// This class provides support for testing Program.cs.
+    /// It covers public Methods and Main()
     /// </summary>
     [TestClass]
     public class ProgramTester
@@ -39,13 +40,19 @@ namespace TinyPG.UnitTests
         // public void MyTestCleanup() { }
         //
         #endregion
-
+        
+        /// <summary>
+        /// Test command line parameter, when file doesn't exist.
+        /// </summary>
         [TestMethod]
         public void TestFileNOK()
         {
             Assert.AreEqual((int)Program.ExitCode.InvalidFilename, Program.Main(new string[] { "foo" }));
         }
 
+        /// <summary>
+        /// Testing grammar parsing when grammar is OK.
+        /// </summary>
         [TestMethod]
         public void TestParseGrammar()
         {
@@ -59,6 +66,9 @@ namespace TinyPG.UnitTests
             Assert.IsNotNull(grammar);
         }
 
+        /// <summary>
+        /// Testing grammar parsing when grammar is NOT OK.
+        /// </summary>
         [TestMethod]
         public void TestParseGrammarNOK()
         {

@@ -27,7 +27,6 @@ namespace TinyPG
         [STAThread]
         public static int Main(string[] args)
         {
-            //var args = Environment.GetCommandLineArgs();
             if (args.Length > 0)
             {
                 string GrammarFilePath = args[0];
