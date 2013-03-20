@@ -38,8 +38,13 @@ namespace TinyPG
                     return (int)ExitCode.InvalidFilename;
                 }
 
-                //As stated in documentation current directory is which of TPG file.
-                Directory.SetCurrentDirectory(Path.GetDirectoryName(GrammarFilePath));
+                //As stated in documentation current directory is the one of the TPG file.
+                string directoryName = Path.GetDirectoryName(GrammarFilePath);
+                if (directoryName != null && directoryName != string.Empty)
+                {
+                    Directory.SetCurrentDirectory(directoryName);
+                }
+
                 DateTime starttimer = DateTime.Now;
 
                 Program prog = new Program(ManageParseError, output);
