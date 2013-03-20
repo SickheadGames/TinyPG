@@ -44,7 +44,7 @@ namespace TinyPG
 
                 Program prog = new Program(ManageParseError, output);
                 Grammar grammar = prog.ParseGrammar(System.IO.File.ReadAllText(GrammarFilePath), Path.GetFileName(GrammarFilePath));
-                
+
                 if (grammar != null && prog.BuildCode(grammar, new TinyPG.Compiler.Compiler()))
                 {
                     TimeSpan span = DateTime.Now.Subtract(starttimer);
@@ -119,10 +119,8 @@ namespace TinyPG
                     this.output.AppendLine(err);
                 this.output.AppendLine("Compilation contains errors, could not compile.");
             }
-            else
-            {
-                new GeneratedFilesWriter(grammar).Generate(false);
-            }
+
+            new GeneratedFilesWriter(grammar).Generate(false);
 
             return compiler.IsCompiled;
         }
