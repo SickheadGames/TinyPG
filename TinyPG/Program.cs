@@ -29,7 +29,7 @@ namespace TinyPG
         {
             if (args.Length > 0)
             {
-                string GrammarFilePath = args[0];
+                string GrammarFilePath = Path.GetFullPath(args[0]);
                 StringBuilder output = new StringBuilder(string.Empty);
                 if (!File.Exists(GrammarFilePath))
                 {
@@ -39,11 +39,7 @@ namespace TinyPG
                 }
 
                 //As stated in documentation current directory is the one of the TPG file.
-                string directoryName = Path.GetDirectoryName(GrammarFilePath);
-                if (directoryName != null && directoryName != string.Empty)
-                {
-                    Directory.SetCurrentDirectory(directoryName);
-                }
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(GrammarFilePath));
 
                 DateTime starttimer = DateTime.Now;
 
