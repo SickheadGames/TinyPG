@@ -49,7 +49,7 @@ namespace TinyPG
                 if (grammar != null && prog.BuildCode(grammar, new TinyPG.Compiler.Compiler()))
                 {
                     TimeSpan span = DateTime.Now.Subtract(starttimer);
-                    output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");
+                    output.AppendLine("Compilation successful in " + span.TotalMilliseconds + "ms.");
                 }
 
                 Console.WriteLine(output.ToString());

@@ -606,7 +606,7 @@ namespace TinyPG
                 if (prog.BuildCode(grammar, compiler))
                 {
                     TimeSpan span = DateTime.Now.Subtract(starttimer);
-                    output.AppendLine("Compilation successfull in " + span.TotalMilliseconds + "ms.");
+                    output.AppendLine("Compilation successful in " + span.TotalMilliseconds + "ms.");
                 }
             }
 
