@@ -25,6 +25,8 @@ These are the new features and fixes we have added to the original code:
  - New `[FileAndLine]` flag for redefining the file and line number reported in errors.
  - IDE now uses C# 3.x compiler when testing the generated parser code.
  - Command line building of parsers.
+ - IDE expression evaluator now include line and column numbers in errors.
+ - Unexpected token errors now display the offending character.
 
 
 ### Downloads
