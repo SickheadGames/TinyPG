@@ -179,7 +179,7 @@ namespace TinyPG.Compiler
             if (errors.Count > 0)
             {
                 foreach (IParseError err in errors)
-                    output += err.Message + "\r\n";
+                    output += string.Format("({0},{1}): {2}\r\n", err.Line, err.Column, err.Message);
             }
             else
             {
