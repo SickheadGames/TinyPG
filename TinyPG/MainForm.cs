@@ -266,6 +266,9 @@ namespace TinyPG
 
         private void textEditor_TextChanged(object sender, EventArgs e)
         {
+            if (textHighlighter.IsHighlighting)
+                return;
+
             marker.Clear();
             TextChangedTimer.Stop();
             TextChangedTimer.Interval = 3000;

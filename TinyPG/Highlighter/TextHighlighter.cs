@@ -344,6 +344,8 @@ namespace TinyPG.Highlighter
             Unlock();
         }
 
+        public bool IsHighlighting { get; private set; }
+
         /// <summary>
         /// this method should be used only by HighlightText or RestoreState methods
         /// </summary>
@@ -370,8 +372,9 @@ namespace TinyPG.Highlighter
             AddRtfHeader(sb);
             AddRtfEnd(sb);
 
+            IsHighlighting = true;
             Textbox.Rtf = sb.ToString();
-
+            IsHighlighting = false;
         }
 
                 /// <summary>
