@@ -221,9 +221,12 @@ namespace TinyPG
                     tok.Text = Input.Substring(tok.StartPos, len);
                     tok.Type = index;
                 }
-                else if (tok.StartPos < tok.EndPos - 1)
+                else if (tok.StartPos == tok.EndPos)
                 {
-                    tok.Text = Input.Substring(tok.StartPos, 1);
+                    if (tok.StartPos < Input.Length)
+                        tok.Text = Input.Substring(tok.StartPos, 1);
+                    else
+                        tok.Text = "EOF";
                 }
 
                 // Update the line and column count for error reporting.
