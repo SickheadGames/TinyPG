@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using System.IO;
 using TinyPG.Compiler;
 
@@ -214,6 +215,7 @@ namespace TinyPG.CodeGenerators.CSharp
                     i = 0;
                     firsts = r.GetFirstTerminals();
                     sb.Append(Indent + "tok = scanner.LookAhead(");
+                    var tokens = new List<string>();
                     foreach (TerminalSymbol s in firsts)
                     {
                         if (i == 0)
@@ -221,6 +223,18 @@ namespace TinyPG.CodeGenerators.CSharp
                         else
                             sb.Append(", TokenType." + s.Name);
                         i++;
+
+                        tokens.Add(s.Name);
+                    }
+                    string expectedTokens;
+                    if (tokens.Count == 1)
+                        expectedTokens = tokens[0];
+                    else if (tokens.Count == 2)
+                        expectedTokens = tokens[0] + " or " + tokens[1];
+                    else
+                    {
+                        expectedTokens = string.Join(", ", tokens.GetRange(0, tokens.Count - 1).ToArray());
+                        expectedTokens += ", or " + tokens[tokens.Count - 1];
                     }
                     sb.AppendLine(");" + Helper.AddComment("Choice Rule"));
 
@@ -236,7 +250,7 @@ namespace TinyPG.CodeGenerators.CSharp
                         sb.AppendLine(Indent + "        break;");
                     }
                     sb.AppendLine(Indent + "    default:");
-                    sb.AppendLine(Indent + "        tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found.\", 0x0002, tok));");
+                    sb.AppendLine(Indent + "        tree.Errors.Add(new ParseError(\"Unexpected token '\" + tok.Text.Replace(\"\\n\", \"\") + \"' found. Expected " + expectedTokens + ".\", 0x0002, tok));");
                     sb.AppendLine(Indent + "        break;");
                     sb.AppendLine(Indent + "}" + Helper.AddComment("Choice Rule"));
                     break;
