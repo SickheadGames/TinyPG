@@ -3,6 +3,10 @@
 using System;
 using System.Collections.Generic;
 
+// Disable unused variable warnings which
+// can happen during the parser generation.
+#pragma warning disable 168
+
 namespace <%Namespace%>
 {
     #region Parser
