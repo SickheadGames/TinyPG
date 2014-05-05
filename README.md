@@ -34,4 +34,4 @@ These are the new features and fixes we have added to the original code:
 
 The latest source code can be found in [zip form here](https://github.com/SickheadGames/TinyPG/archive/master.zip).
 
-The latest binaries can be found in the [build artifacts](http://teamcity.sickhead.com/viewType.html?buildTypeId=bt15&branch_project5=master).
+The latest binaries can be found in the [build artifacts](http://teamcity.sickhead.com/viewType.html?buildTypeId=bt15&branch_project5=master&guest=1).
