@@ -1,14 +1,16 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.IO;
+using TinyPG;
 using TinyPG.Compiler;
 using System.Text.RegularExpressions;
 
-namespace TinyPG.CodeGenerators.CSharp
+namespace TinyPG.CodeGenerators.Java
 {
     public class ParseTreeGenerator : BaseGenerator, ICodeGenerator
     {
-        internal ParseTreeGenerator()
-            : base("ParseTree.cs")
+        internal ParseTreeGenerator() : base("ParseTree.java")
         {
         }
 
@@ -26,12 +28,12 @@ namespace TinyPG.CodeGenerators.CSharp
             // build non terminal tokens
             foreach (Symbol s in Grammar.GetNonTerminals())
             {
-                evalsymbols.AppendLine("                case TokenType." + s.Name + ":");
+                evalsymbols.AppendLine("                case " + s.Name + ":");
                 evalsymbols.AppendLine("                    Value = Eval" + s.Name + "(tree, paramlist);");
                 //evalsymbols.AppendLine("                Value = Token.Text;");
                 evalsymbols.AppendLine("                    break;");
 
-                evalmethods.AppendLine("        protected virtual object Eval" + s.Name + "(ParseTree tree, params object[] paramlist)");
+                evalmethods.AppendLine("        protected Object Eval" + s.Name + "(ParseTree tree, Object... paramlist)");
                 evalmethods.AppendLine("        {");
                 if (s.CodeBlock != null)
                 {
@@ -43,12 +45,12 @@ namespace TinyPG.CodeGenerators.CSharp
                     if (s.Name == "Start") // return a nice warning message from root object.
                         evalmethods.AppendLine("            return \"Could not interpret input; no semantics implemented.\";");
                     else
-                        evalmethods.AppendLine("            foreach (ParseNode node in Nodes)\r\n" +
-                                               "                node.Eval(tree, paramlist);\r\n" +
-                                               "            return null;");
+                        evalmethods.AppendLine("            for (ParseNode node : getNodes())\r\n" +
+											   "                node.Eval(tree, paramlist);\r\n" +
+											   "            return null;");
 
-                    // otherwise simply not implemented!
-                }
+					// otherwise simply not implemented!
+				}
                 evalmethods.AppendLine("        }\r\n");
             }
 
@@ -56,19 +58,19 @@ namespace TinyPG.CodeGenerators.CSharp
             {
                 parsetree = parsetree.Replace(@"<%Namespace%>", "TinyPG.Debug");
                 parsetree = parsetree.Replace(@"<%ParseError%>", " : TinyPG.Debug.IParseError");
-                parsetree = parsetree.Replace(@"<%ParseErrors%>", "List<TinyPG.Debug.IParseError>");
+                parsetree = parsetree.Replace(@"<%ParseErrors%>", "ArrayList<TinyPG.Debug.IParseError>");
                 parsetree = parsetree.Replace(@"<%IParseTree%>", ", TinyPG.Debug.IParseTree");
                 parsetree = parsetree.Replace(@"<%IParseNode%>", " : TinyPG.Debug.IParseNode");
                 parsetree = parsetree.Replace(@"<%ITokenGet%>", "public IToken IToken { get {return (IToken)Token;} }");
 
-                string inodes = "public List<IParseNode> INodes {get { return nodes.ConvertAll<IParseNode>( new Converter<ParseNode, IParseNode>( delegate(ParseNode n) { return (IParseNode)n; })); }}\r\n\r\n";
+                string inodes = "public ArrayList<IParseNode> INodes {get { return nodes.ConvertAll<IParseNode>( new Converter<ParseNode, IParseNode>( delegate(ParseNode n) { return (IParseNode)n; })); }}\r\n\r\n";
                 parsetree = parsetree.Replace(@"<%INodesGet%>", inodes);
             }
             else
             {
                 parsetree = parsetree.Replace(@"<%Namespace%>", Grammar.Directives["TinyPG"]["Namespace"]);
                 parsetree = parsetree.Replace(@"<%ParseError%>", "");
-                parsetree = parsetree.Replace(@"<%ParseErrors%>", "List<ParseError>");
+                parsetree = parsetree.Replace(@"<%ParseErrors%>", "ArrayList<ParseError>");
                 parsetree = parsetree.Replace(@"<%IParseTree%>", "");
                 parsetree = parsetree.Replace(@"<%IParseNode%>", "");
                 parsetree = parsetree.Replace(@"<%ITokenGet%>", "");

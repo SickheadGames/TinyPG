@@ -169,11 +169,11 @@ namespace <%Namespace%>
                 // alter the file and line number.
                 if (tok.Type == FileAndLine)
                 {
-                    var match = Patterns[tok.Type].Match(tok.Text);
-                    var fileMatch = match.Groups["File"];
+                    Match match = Patterns[tok.Type].Match(tok.Text);
+                    Group fileMatch = match.Groups["File"];
                     if (fileMatch.Success)
                         currentFile = fileMatch.Value.Replace("\\\\", "\\");
-                    var lineMatch = match.Groups["Line"];
+                    Group lineMatch = match.Groups["Line"];
                     if (lineMatch.Success)
                         currentline = int.Parse(lineMatch.Value, NumberStyles.Integer, CultureInfo.InvariantCulture);
                 }

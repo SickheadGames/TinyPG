@@ -50,6 +50,10 @@
     <Compile Include="CodeGenerators\CSharp\ParseTreeGenerator.cs" />
     <Compile Include="CodeGenerators\CSharp\ScannerGenerator.cs" />
     <Compile Include="CodeGenerators\CSharp\TextHighlighterGenerator.cs" />
+    <Compile Include="CodeGenerators\Java\ParserGenerator.cs" />
+    <Compile Include="CodeGenerators\Java\ParseTreeGenerator.cs" />
+    <Compile Include="CodeGenerators\Java\ScannerGenerator.cs" />
+    <Compile Include="CodeGenerators\Java\TextHighlighterGenerator.cs" />
     <Compile Include="CodeGenerators\VBNet\ParserGenerator.cs" />
     <Compile Include="CodeGenerators\VBNet\ParseTreeGenerator.cs" />
     <Compile Include="CodeGenerators\VBNet\ScannerGenerator.cs" />
@@ -168,6 +172,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Templates\Java\Parser.java">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Java\ParseTree.java">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Java\Scanner.java">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\VB\Parser.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

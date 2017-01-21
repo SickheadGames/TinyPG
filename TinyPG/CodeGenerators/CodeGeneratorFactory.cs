@@ -9,8 +9,9 @@ namespace TinyPG.CodeGenerators
     public enum SupportedLanguage
     {
         CSharp = 0, // default
-        VBNet = 1,
-    }
+		VBNet = 1,
+		Java = 2,
+	}
 
     public static class CodeGeneratorFactory
     {
@@ -24,6 +25,8 @@ namespace TinyPG.CodeGenerators
                 case "vb.net":
                 case "vb":
                     return SupportedLanguage.VBNet;
+				case "java":
+					return SupportedLanguage.Java;
                 default: // c# is default language
                     return SupportedLanguage.CSharp;
             }
@@ -33,21 +36,32 @@ namespace TinyPG.CodeGenerators
         {
             switch (GetSupportedLanguage(language))
             {
-                // set the default templates directory
-                case SupportedLanguage.VBNet:
-                    switch (generator)
-                    {
-                        case "Parser":
-                            return new VBNet.ParserGenerator();
-                        case "Scanner":
-                            return new VBNet.ScannerGenerator();
-                        case "ParseTree":
-                            return new VBNet.ParseTreeGenerator();
-                        case "TextHighlighter":
-                            return new VBNet.TextHighlighterGenerator();
-                    }
-                    break;
-                default: // c# is default language
+				// set the default templates directory
+				case SupportedLanguage.VBNet:
+					switch (generator)
+					{
+						case "Parser":
+							return new VBNet.ParserGenerator();
+						case "Scanner":
+							return new VBNet.ScannerGenerator();
+						case "ParseTree":
+							return new VBNet.ParseTreeGenerator();
+						case "TextHighlighter":
+							return new VBNet.TextHighlighterGenerator();
+					}
+					break;
+				case SupportedLanguage.Java:
+					switch (generator)
+					{
+						case "Parser":
+							return new Java.ParserGenerator();
+						case "Scanner":
+							return new Java.ScannerGenerator();
+						case "ParseTree":
+							return new Java.ParseTreeGenerator();
+					}
+					break;
+				default: // c# is default language
                     switch (generator)
                     {
                         case "Parser":
@@ -74,8 +88,10 @@ namespace TinyPG.CodeGenerators
                 case "vb.net":
                 case "vb":
                     return new Microsoft.VisualBasic.VBCodeProvider();
-                default:
-                    return new Microsoft.CSharp.CSharpCodeProvider(new Dictionary<string, string> { { "CompilerVersion", "v3.5" } });
+				case "java":
+					return null;
+				default:
+                    return new Microsoft.CSharp.CSharpCodeProvider();
             }
         }
     }

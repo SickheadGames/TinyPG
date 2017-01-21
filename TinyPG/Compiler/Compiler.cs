@@ -88,6 +88,11 @@ namespace TinyPG.Compiler
             string language = Grammar.Directives["TinyPG"]["Language"];
             CodeDom.CompilerResults Result;
             CodeDom.CodeDomProvider provider = CodeGeneratorFactory.CreateCodeDomProvider(language);
+			if(provider == null)
+			{
+				Errors.Add("Can't compile " + language + " project.");
+				return;
+			}
             System.CodeDom.Compiler.CompilerParameters compilerparams = new System.CodeDom.Compiler.CompilerParameters();
             compilerparams.GenerateInMemory = true;
             compilerparams.GenerateExecutable = false;
