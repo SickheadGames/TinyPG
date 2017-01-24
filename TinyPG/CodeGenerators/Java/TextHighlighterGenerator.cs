@@ -61,7 +61,8 @@ namespace TinyPG.CodeGenerators.Java
                 colorindex++;
             }
 
-            generatedtext = generatedtext.Replace(@"<%HightlightTokens%>", tokens.ToString());
+			generatedtext = generatedtext.Replace(@"<%SourceFilename%>", Grammar.SourceFilename);
+			generatedtext = generatedtext.Replace(@"<%HightlightTokens%>", tokens.ToString());
             generatedtext = generatedtext.Replace(@"<%RtfColorPalette%>", colors.ToString());
 
             if (Debug)

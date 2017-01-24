@@ -1,13 +1,37 @@
 //@TinyPG - a Tiny Parser Generator v1.2
 //Copyright © Herre Kuijpers 2008-2010
 //Simple expression calculator
-<% @TinyPG Language="C#" OutputPath="D:\MyProjects\Net\TinyPG\TinyPGDebugger\TinyPGDebugger\" %>
+<% @TinyPG Language="C#" OutputPath="C:\Users\Ping\Documents\Visual Studio 2015\Projects\TinyPG_gitmine\TinyPG\" %>
 
 // include text highlighting as part of the input window
 <% @TextHighlighter Generate="true" %>
 
+<% @ParseTree CustomCode="
+		protected System.Collections.Generic.Dictionary<string,int> context;
+		public System.Collections.Generic.Dictionary<string,int> Context
+		{
+			get
+			{
+				if(context == null && this.Parent != null) {
+					return Parent.Context;
+				}
+				return null;
+			}
+			set
+			{
+				context = value;
+			}
+		}
+
+		public int GetVarValue(string id)
+		{
+			return Context == null?0:Context[id];
+		}
+" %>
+
 			EOF         	-> @"^\s*$";
 [Color(255, 0, 0)] 	NUMBER 	-> @"[0-9]+";
+[Color(255, 0, 0)] 	ID	 	-> @"[a-zA-Z_][a-zA-Z0-9_]*";
 [Color(0, 0, 255)] 	PLUSMINUS 	-> @"(\+|-)";
 [Color(0, 0, 255)] 	MULTDIV 	-> @"\*|/";
 [Color(0, 0, 255)] 	BROPEN 	->  @"\(";
@@ -49,8 +73,10 @@ MultExpr -> Atom (MULTDIV Atom)*
 	return Value; 
 };
 
-Atom -> NUMBER | BROPEN AddExpr BRCLOSE
+Atom -> NUMBER | BROPEN AddExpr BRCLOSE | ID
 {
-	if ($NUMBER != null) return $NUMBER; 
+	if ($NUMBER != null) return $NUMBER;
+	if ($ID != null) return GetVarValue($ID.ToString());
 	else return $AddExpr; 
 };
+

@@ -61,7 +61,8 @@ namespace TinyPG.CodeGenerators.VBNet
                 counter++;
             }
 
-            scanner = scanner.Replace(@"<%SkipList%>", skiplist.ToString());
+			scanner = scanner.Replace(@"<%SourceFilename%>", Grammar.SourceFilename);
+			scanner = scanner.Replace(@"<%SkipList%>", skiplist.ToString());
             scanner = scanner.Replace(@"<%RegExps%>", regexps.ToString());
             scanner = scanner.Replace(@"<%TokenType%>", tokentype.ToString());
 
@@ -75,8 +76,8 @@ namespace TinyPG.CodeGenerators.VBNet
                 scanner = scanner.Replace(@"<%ImplementsITokenLength%>", " Implements IToken.Length");
                 scanner = scanner.Replace(@"<%ImplementsITokenText%>", " Implements IToken.Text");
                 scanner = scanner.Replace(@"<%ImplementsITokenToString%>", " Implements IToken.ToString");
-
-            }
+				scanner = scanner.Replace(@"<%ScannerCustomCode%>", Grammar.Directives["Scanner"]["CustomCode"]);
+			}
             else
             {
                 scanner = scanner.Replace(@"<%Imports%>", "");
@@ -87,7 +88,8 @@ namespace TinyPG.CodeGenerators.VBNet
                 scanner = scanner.Replace(@"<%ImplementsITokenLength%>", "");
                 scanner = scanner.Replace(@"<%ImplementsITokenText%>", "");
                 scanner = scanner.Replace(@"<%ImplementsITokenToString%>", "");
-            }
+				scanner = scanner.Replace(@"<%ScannerCustomCode%>", Grammar.Directives["Scanner"]["CustomCode"]);
+			}
 
             return scanner;
         }

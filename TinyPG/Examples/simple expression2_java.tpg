@@ -1,0 +1,77 @@
+//@TinyPG - a Tiny Parser Generator v1.2
+//Copyright © Herre Kuijpers 2008-2010
+//Simple expression calculator
+<% @TinyPG Language="Java" Namespace="tinypg" OutputPath="C:\Users\Ping\Documents\TestParser\src\tinypg\" %>
+
+// include text highlighting as part of the input window
+<% @TextHighlighter Generate="true" %>
+
+<% @ParseTree CustomCode="
+	protected java.util.HashMap<String,Integer> context;
+	public java.util.HashMap<String,Integer> getContext() {
+		if(context == null && this.Parent != null) {
+			return Parent.getContext();
+		}
+		return null;
+	}
+
+	public void setContext(java.util.HashMap<String,Integer> value) {
+		context = value;
+	}
+
+	public int getVarValue(String id) {
+		return getContext() == null?0:getContext().get(id);
+	}
+" %>
+
+			EOF         	-> @"^\s*$";
+[Color(255, 0, 0)] 	NUMBER 	-> @"[0-9]+";
+[Color(255, 0, 0)] 	ID	 	-> @"[a-zA-Z_][a-zA-Z0-9_]*";
+[Color(0, 0, 255)] 	PLUSMINUS 	-> @"(\+|-)";
+[Color(0, 0, 255)] 	MULTDIV 	-> @"\*|/";
+[Color(0, 0, 255)] 	BROPEN 	->  @"\(";
+[Color(0, 0, 255)] 	BRCLOSE 	->  @"\)";
+
+[Skip] 		WHITESPACE  	-> @"\s+";
+
+Start -> (AddExpr)? EOF
+{ return $AddExpr; };      
+
+AddExpr -> MultExpr (PLUSMINUS MultExpr)*
+{ 
+	int Value = (int)$MultExpr;
+	int i = 1;
+	while ($MultExpr[i] != null)
+	{
+		String sign = $PLUSMINUS[i-1].toString();
+		if (sign.equals("+"))
+			Value += (int)($MultExpr[i++]);
+		else 
+			Value -= (int)($MultExpr[i++]);
+	}
+
+	return Value; 
+};
+
+MultExpr -> Atom (MULTDIV Atom)*
+{ 
+	int Value = (int)$Atom;
+	int i = 1;
+	while ($Atom[i] != null)
+	{
+		String sign = $MULTDIV[i-1].toString();
+		if (sign.equals("*"))
+			Value *= (int)($Atom[i++]);
+		else 
+			Value /= (int)($Atom[i++]);
+	}
+	return Value; 
+};
+
+Atom -> NUMBER | BROPEN AddExpr BRCLOSE | ID
+{
+	if ($NUMBER != null) return Integer.parseInt($NUMBER.toString());
+	if ($ID != null) return getVarValue($ID.toString());
+	else return $AddExpr; 
+};
+

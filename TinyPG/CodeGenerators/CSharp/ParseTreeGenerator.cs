@@ -52,7 +52,8 @@ namespace TinyPG.CodeGenerators.CSharp
                 evalmethods.AppendLine("        }\r\n");
             }
 
-            if (Debug)
+			parsetree = parsetree.Replace(@"<%SourceFilename%>", Grammar.SourceFilename);
+			if (Debug)
             {
                 parsetree = parsetree.Replace(@"<%Namespace%>", "TinyPG.Debug");
                 parsetree = parsetree.Replace(@"<%ParseError%>", " : TinyPG.Debug.IParseError");
@@ -63,7 +64,8 @@ namespace TinyPG.CodeGenerators.CSharp
 
                 string inodes = "public List<IParseNode> INodes {get { return nodes.ConvertAll<IParseNode>( new Converter<ParseNode, IParseNode>( delegate(ParseNode n) { return (IParseNode)n; })); }}\r\n\r\n";
                 parsetree = parsetree.Replace(@"<%INodesGet%>", inodes);
-            }
+				parsetree = parsetree.Replace(@"<%ParseTreeCustomCode%>", Grammar.Directives["ParseTree"]["CustomCode"]);
+			}
             else
             {
                 parsetree = parsetree.Replace(@"<%Namespace%>", Grammar.Directives["TinyPG"]["Namespace"]);
@@ -72,8 +74,9 @@ namespace TinyPG.CodeGenerators.CSharp
                 parsetree = parsetree.Replace(@"<%IParseTree%>", "");
                 parsetree = parsetree.Replace(@"<%IParseNode%>", "");
                 parsetree = parsetree.Replace(@"<%ITokenGet%>", "");
-                parsetree = parsetree.Replace(@"<%INodesGet%>", "");
-            }
+				parsetree = parsetree.Replace(@"<%INodesGet%>", "");
+				parsetree = parsetree.Replace(@"<%ParseTreeCustomCode%>", Grammar.Directives["ParseTree"]["CustomCode"]);
+			}
 
             parsetree = parsetree.Replace(@"<%EvalSymbols%>", evalsymbols.ToString());
             parsetree = parsetree.Replace(@"<%VirtualEvalMethods%>", evalmethods.ToString());

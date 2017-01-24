@@ -3,13 +3,36 @@
 //Simple expression calculator
 
 // Generate VB code
-<% @TinyPG Language="VB" %>
+<% @TinyPG Language="VB" OutputPath="C:\Users\Ping\Documents\Visual Studio 2015\Projects\TestVB\TestVB\" %>
 
 // include text highlighting as part of the input window
 <% @TextHighlighter Generate="true" %>
 
+<% @ParseTree CustomCode="
+		Protected _context as System.Collections.Generic.Dictionary(Of String, Integer)
+		Public Property Context as System.Collections.Generic.Dictionary(Of String, Integer)
+			Get
+				if(_context Is  Nothing And Me.Parent IsNot Nothing) Then
+					return Parent.Context
+				End If
+				return Nothing
+			End Get
+			Set
+				_context = value
+			End Set
+		End Property
+
+		Public Function GetVarValue(id as String) As Integer
+			If Context Is Nothing
+				Return 0
+			Else
+				Return Context.Item(id)
+			End If
+		End Function
+" %>
 			EOF         -> @"^\s*$";
 [Color(255, 0, 0)] 	NUMBER 	-> @"[0-9]+";
+[Color(255, 0, 0)] 	ID	 	-> @"[a-zA-Z_][a-zA-Z0-9_]*";
 [Color(0, 0, 255)] 	PLUSMINUS 	-> @"(\+|-)";
 [Color(0, 0, 255)] 	MULTDIV 	-> @"\*|/";
 [Color(0, 0, 255)] 	BROPEN 	->  @"\(";
@@ -55,10 +78,12 @@ MultExpr -> Atom (MULTDIV Atom)*
 	Return Value
 };
 
-Atom -> NUMBER |  BROPEN AddExpr BRCLOSE
+Atom -> NUMBER |  BROPEN AddExpr BRCLOSE | ID
 {
 	If $NUMBER IsNot Nothing Then
 		Return $NUMBER
+	ElseIf $ID IsNot Nothing
+		Return Me.GetVarValue($ID.ToString())
 	Else 
 		Return $AddExpr
 	End If

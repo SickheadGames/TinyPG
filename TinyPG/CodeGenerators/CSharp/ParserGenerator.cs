@@ -28,20 +28,21 @@ namespace TinyPG.CodeGenerators.CSharp
                 parsers.Append(method);
             }
 
-
-            if (Debug)
+			parser = parser.Replace(@"<%SourceFilename%>", Grammar.SourceFilename);
+			if (Debug)
             {
                 parser = parser.Replace(@"<%Namespace%>", "TinyPG.Debug");
                 parser = parser.Replace(@"<%IParser%>", " : TinyPG.Debug.IParser");
-                parser = parser.Replace(@"<%IParseTree%>", "TinyPG.Debug.IParseTree");
-
-            }
+				parser = parser.Replace(@"<%IParseTree%>", "TinyPG.Debug.IParseTree");
+				parser = parser.Replace(@"<%ParserCustomCode%>", Grammar.Directives["Parser"]["CustomCode"]);
+			}
             else
             {
                 parser = parser.Replace(@"<%Namespace%>", Grammar.Directives["TinyPG"]["Namespace"]);
                 parser = parser.Replace(@"<%IParser%>", "");
                 parser = parser.Replace(@"<%IParseTree%>", "ParseTree");
-            }
+				parser = parser.Replace(@"<%ParserCustomCode%>", Grammar.Directives["Parser"]["CustomCode"]);
+			}
 
             parser = parser.Replace(@"<%ParseNonTerminals%>", parsers.ToString());
             return parser;

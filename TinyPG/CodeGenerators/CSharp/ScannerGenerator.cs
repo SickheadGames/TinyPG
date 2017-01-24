@@ -67,20 +67,23 @@ namespace TinyPG.CodeGenerators.CSharp
                 counter++;
             }
 
-            scanner = scanner.Replace(@"<%SkipList%>", skiplist.ToString());
+			scanner = scanner.Replace(@"<%SourceFilename%>", Grammar.SourceFilename);
+			scanner = scanner.Replace(@"<%SkipList%>", skiplist.ToString());
             scanner = scanner.Replace(@"<%RegExps%>", regexps.ToString());
             scanner = scanner.Replace(@"<%TokenType%>", tokentype.ToString());
 
             if (Debug)
             {
                 scanner = scanner.Replace(@"<%Namespace%>", "TinyPG.Debug");
-                scanner = scanner.Replace(@"<%IToken%>", " : TinyPG.Debug.IToken");
-            }
+				scanner = scanner.Replace(@"<%IToken%>", " : TinyPG.Debug.IToken");
+				scanner = scanner.Replace(@"<%ScannerCustomCode%>", Grammar.Directives["Scanner"]["CustomCode"]);
+			}
             else
             {
                 scanner = scanner.Replace(@"<%Namespace%>", Grammar.Directives["TinyPG"]["Namespace"]);
                 scanner = scanner.Replace(@"<%IToken%>", "");
-            }
+				scanner = scanner.Replace(@"<%ScannerCustomCode%>", Grammar.Directives["Scanner"]["CustomCode"]);
+			}
 
             return scanner;
         }

@@ -444,7 +444,7 @@ namespace TinyPG
 
         private void theTinyPGGrammarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NotepadViewFile(AppDomain.CurrentDomain.BaseDirectory + @"Examples\BNFGrammar v1.1.tpg");
+            NotepadViewFile(AppDomain.CurrentDomain.BaseDirectory + @"Examples\BNFGrammar v1.3.tpg");
         }
 
         private void theTinyPGGrammarV10ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -454,7 +454,7 @@ namespace TinyPG
 
         private void theTinyPGGrammarHighlighterV12ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NotepadViewFile(AppDomain.CurrentDomain.BaseDirectory + @"Examples\GrammarHighlighter.tpg");
+            NotepadViewFile(AppDomain.CurrentDomain.BaseDirectory + @"Examples\GrammarHighlighter v1.3.tpg");
         }
 
         private void textOutput_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -602,9 +602,10 @@ namespace TinyPG
             DateTime starttimer = DateTime.Now;
             grammar = prog.ParseGrammar(textEditor.Text, GrammarFile);
 
-            if (grammar != null)
+			if (grammar != null)
             {
-                SetHighlighterLanguage(grammar.Directives["TinyPG"]["Language"]);
+				grammar.SourceFilename = GrammarFile;
+				SetHighlighterLanguage(grammar.Directives["TinyPG"]["Language"]);
 
                 if (prog.BuildCode(grammar, compiler))
                 {

@@ -70,6 +70,8 @@ namespace TinyPG.Compiler
         /// </summary>
         public Directives Directives { get; set; }
 
+		public string SourceFilename { get; set; }
+
         public Grammar()
         {
             Symbols = new Symbols();
@@ -182,10 +184,13 @@ namespace TinyPG.Compiler
                 d = new Directive("Parser");
                 Directives.Insert(1, d);
             }
-            if (!d.ContainsKey("Generate"))
-                d["Generate"] = "True"; // generate parser by default
+			if (!d.ContainsKey("Generate"))
+				d["Generate"] = "True"; // generate parser by default
+			if (!d.ContainsKey("CustomCode"))
+				d["CustomCode"] = ""; // no custom code by default
 
-            d = Directives.Find("Scanner");
+
+			d = Directives.Find("Scanner");
             if (d == null)
             {
                 d = new Directive("Scanner");
@@ -193,8 +198,10 @@ namespace TinyPG.Compiler
             }
             if (!d.ContainsKey("Generate"))
                 d["Generate"] = "True"; // generate scanner by default
+			if (!d.ContainsKey("CustomCode"))
+				d["CustomCode"] = ""; // no custom code by default
 
-            d = Directives.Find("ParseTree");
+			d = Directives.Find("ParseTree");
             if (d == null)
             {
                 d = new Directive("ParseTree");
@@ -202,8 +209,10 @@ namespace TinyPG.Compiler
             }
             if (!d.ContainsKey("Generate"))
                 d["Generate"] = "True"; // generate parsetree by default
+			if (!d.ContainsKey("CustomCode"))
+				d["CustomCode"] = ""; // no custom code by default
 
-            d = Directives.Find("TextHighlighter");
+			d = Directives.Find("TextHighlighter");
             if (d == null)
             {
                 d = new Directive("TextHighlighter");

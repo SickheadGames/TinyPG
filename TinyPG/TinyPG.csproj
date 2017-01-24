@@ -151,6 +151,7 @@
     <Content Include="Templates\C#\TextHighlighter.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Examples\simple expression2_vb.tpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\AutoComplete.resx">
