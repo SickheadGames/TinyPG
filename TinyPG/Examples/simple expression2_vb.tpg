@@ -3,7 +3,7 @@
 //Simple expression calculator
 
 // Generate VB code
-<% @TinyPG Language="VB" OutputPath="C:\Users\Ping\Documents\Visual Studio 2015\Projects\TestVB\TestVB\" %>
+<% @TinyPG Language="VB" OutputPath="TestVB\" %>
 
 // include text highlighting as part of the input window
 <% @TextHighlighter Generate="true" %>
