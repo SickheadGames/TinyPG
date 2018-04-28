@@ -17,7 +17,7 @@ Namespace <%Namespace%>
         End Sub
 
 
-    Public Function Parse(ByVal input As String) As <%IParseTree%>
+        Public Function Parse(ByVal input As String) As <%IParseTree%>
             m_tree = New ParseTree()
             Return Parse(input, m_tree)
         End Function
@@ -32,7 +32,7 @@ Namespace <%Namespace%>
             Return m_tree
         End Function
 
-		<%ParseNonTerminals%>
+        <%ParseNonTerminals%>
 
 <%ParserCustomCode%>
     End Class

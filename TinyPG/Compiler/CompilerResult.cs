@@ -13,10 +13,10 @@ using System.Text;
 using TinyPG.Debug;
 namespace TinyPG.Compiler
 {
-    public class CompilerResult
-    {
-        public IParseTree ParseTree;
-        public string Output;
-        public object Value;
-    }
+	public class CompilerResult
+	{
+		public IParseTree ParseTree;
+		public string Output;
+		public object Value;
+	}
 }

@@ -6,42 +6,42 @@ using TinyPG.Compiler;
 using System.IO;
 
 namespace TinyPG
-{
-    public class GeneratedFilesWriter
-    {
+	{
+	public class GeneratedFilesWriter
+	{
 
-        private Grammar grammar = null;
+		private Grammar grammar = null;
 
-        public GeneratedFilesWriter(Grammar grammar)
-        {
-            this.grammar = grammar;
-        }
+		public GeneratedFilesWriter(Grammar grammar)
+		{
+			this.grammar = grammar;
+		}
 
-        public void Generate(bool debug)
-        {
+		public void Generate(bool debug)
+		{
 
-            ICodeGenerator generator;
+			ICodeGenerator generator;
 
-            string language = grammar.Directives["TinyPG"]["Language"];
-            foreach (Directive d in grammar.Directives)
-            {
-                generator = CodeGeneratorFactory.CreateGenerator(d.Name, language);
+			string language = grammar.Directives["TinyPG"]["Language"];
+			foreach (Directive d in grammar.Directives)
+			{
+				generator = CodeGeneratorFactory.CreateGenerator(d.Name, language);
                 
-                if (generator != null && d.ContainsKey("FileName"))
-                {
-                    generator.FileName = d["FileName"];
-                }
+				if (generator != null && d.ContainsKey("FileName"))
+				{
+					generator.FileName = d["FileName"];
+				}
 
-                if (generator != null && d["Generate"].ToLower() == "true")
-                {
-                    File.WriteAllText(
-                        Path.Combine(grammar.GetOutputPath(), generator.FileName),
-                        generator.Generate(grammar, debug));
-                }
-            }
+				if (generator != null && d["Generate"].ToLower() == "true")
+				{
+					File.WriteAllText(
+						Path.Combine(grammar.GetOutputPath(), generator.FileName),
+						generator.Generate(grammar, debug));
+				}
+			}
 
-        }
+		}
 
 
-    }
+}
 }

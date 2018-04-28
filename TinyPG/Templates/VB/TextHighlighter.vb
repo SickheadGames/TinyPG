@@ -13,8 +13,8 @@ Imports System.Threading
 Namespace <%Namespace%>
     ' Summary:
     '     System.EventArgs is the base class for classes containing event data.
-    <Serializable()> _
-    <ComVisible(True)> _
+    <Serializable()>
+    <ComVisible(True)>
     Public Class ContextSwitchEventArgs
         Inherits EventArgs
         Public ReadOnly PreviousContext As ParseNode
@@ -57,19 +57,19 @@ Namespace <%Namespace%>
 
 
         ' some winapís required
-        <DllImport("user32", CharSet:=CharSet.Auto)> _
+        <DllImport("user32", CharSet:=CharSet.Auto)>
         Private Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal msg As Integer, ByVal wParam As Integer, ByVal lParam As IntPtr) As IntPtr
         End Function
 
-        <DllImport("user32.dll")> _
+        <DllImport("user32.dll")>
         Private Shared Function PostMessageA(ByVal hWnd As IntPtr, ByVal nBar As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Boolean
         End Function
 
-        <DllImport("user32.dll", CharSet:=CharSet.Auto)> _
+        <DllImport("user32.dll", CharSet:=CharSet.Auto)>
         Private Shared Function GetScrollPos(ByVal hWnd As Integer, ByVal nBar As Integer) As Integer
         End Function
 
-        <DllImport("user32.dll")> _
+        <DllImport("user32.dll")>
         Private Shared Function SetScrollPos(ByVal hWnd As IntPtr, ByVal nBar As Integer, ByVal nPos As Integer, ByVal bRedraw As Boolean) As Integer
         End Function
 
@@ -142,7 +142,7 @@ Namespace <%Namespace%>
                 Dim nextItem As UndoItem = ua
                 Dim i As Integer = 0
                 While i < 6
-    Dim prevItem As UndoItem = UndoList(UndoList.Count - 2 - i)
+                    Dim prevItem As UndoItem = UndoList(UndoList.Count - 2 - i)
                     canRemove = canRemove And (Math.Abs(prevItem.Text.Length - nextItem.Text.Length) <= 1 AndAlso Math.Abs(prevItem.Position - nextItem.Position) <= 1)
                     nextItem = prevItem
                     System.Math.Max(System.Threading.Interlocked.Increment(i), i - 1)
@@ -154,352 +154,352 @@ Namespace <%Namespace%>
             UndoIndex = UndoList.Count
         End Sub
 
-    Public Sub ClearUndo()
-        UndoList = New List(Of UndoItem)()
-        UndoIndex = 0
-    End Sub
+        Public Sub ClearUndo()
+            UndoList = New List(Of UndoItem)()
+            UndoIndex = 0
+        End Sub
 
-    Public Sub Undo()
-        If Not CanUndo Then
-            Return
-        End If
+        Public Sub Undo()
+            If Not CanUndo Then
+                Return
+            End If
 
-        System.Math.Max(System.Threading.Interlocked.Decrement(UndoIndex), UndoIndex + 1)
-        If UndoIndex < 1 Then
-            UndoIndex = 1
-        End If
+            System.Math.Max(System.Threading.Interlocked.Decrement(UndoIndex), UndoIndex + 1)
+            If UndoIndex < 1 Then
+                UndoIndex = 1
+            End If
 
-        ' implement undo action here
-        Dim ua As UndoItem = UndoList(UndoIndex - 1)
-        RestoreState(ua)
-    End Sub
+            ' implement undo action here
+            Dim ua As UndoItem = UndoList(UndoIndex - 1)
+            RestoreState(ua)
+        End Sub
 
-    Public Sub Redo()
-        If Not CanRedo Then
-            Return
-        End If
+        Public Sub Redo()
+            If Not CanRedo Then
+                Return
+            End If
 
-        System.Math.Max(System.Threading.Interlocked.Increment(UndoIndex), UndoIndex - 1)
-        If UndoIndex > UndoList.Count Then
-            UndoIndex = UndoList.Count
-        End If
+            System.Math.Max(System.Threading.Interlocked.Increment(UndoIndex), UndoIndex - 1)
+            If UndoIndex > UndoList.Count Then
+                UndoIndex = UndoList.Count
+            End If
 
-        Dim ua As UndoItem = UndoList(UndoIndex - 1)
-        RestoreState(ua)
+            Dim ua As UndoItem = UndoList(UndoIndex - 1)
+            RestoreState(ua)
 
-    End Sub
+        End Sub
 
-    Private Sub RestoreState(ByVal item As UndoItem)
-        Lock()
-        ' restore state
-        Textbox.Rtf = item.Text
-        Textbox.[Select](item.Position, 0)
-        HScrollPos = item.ScrollPosition.X
-        VScrollPos = item.ScrollPosition.Y
+        Private Sub RestoreState(ByVal item As UndoItem)
+            Lock()
+            ' restore state
+            Textbox.Rtf = item.Text
+            Textbox.[Select](item.Position, 0)
+            HScrollPos = item.ScrollPosition.X
+            VScrollPos = item.ScrollPosition.Y
 
-        Unlock()
-    End Sub
+            Unlock()
+        End Sub
 
-    Public ReadOnly Property CanUndo() As Boolean
-        Get
-            Return UndoIndex > 0
-        End Get
-    End Property
+        Public ReadOnly Property CanUndo() As Boolean
+            Get
+                Return UndoIndex > 0
+            End Get
+        End Property
 
-    Public ReadOnly Property CanRedo() As Boolean
-        Get
-            Return UndoIndex < UndoList.Count
-        End Get
-    End Property
+        Public ReadOnly Property CanRedo() As Boolean
+            Get
+                Return UndoIndex < UndoList.Count
+            End Get
+        End Property
 
-    Public Sub New(ByVal textbox As RichTextBox, ByVal scanner As Scanner, ByVal parser As Parser)
-        Me.Textbox = textbox
-        Me.Scanner = scanner
-        Me.Parser = parser
+        Public Sub New(ByVal textbox As RichTextBox, ByVal scanner As Scanner, ByVal parser As Parser)
+            Me.Textbox = textbox
+            Me.Scanner = scanner
+            Me.Parser = parser
 
-        ClearUndo()
+            ClearUndo()
 
-        AddHandler Textbox.TextChanged, AddressOf Textbox_TextChanged
-        AddHandler textbox.KeyDown, AddressOf textbox_KeyDown
-        AddHandler Textbox.SelectionChanged, AddressOf Textbox_SelectionChanged
-        AddHandler Textbox.Disposed, AddressOf Textbox_Disposed
+            AddHandler textbox.TextChanged, AddressOf Textbox_TextChanged
+            AddHandler textbox.KeyDown, AddressOf textbox_KeyDown
+            AddHandler textbox.SelectionChanged, AddressOf Textbox_SelectionChanged
+            AddHandler textbox.Disposed, AddressOf Textbox_Disposed
 
-        Tree = New ParseTree()
-        currentContext = Tree
+            Tree = New ParseTree()
+            currentContext = Tree
 
-        threadAutoHighlight = New Thread(AddressOf AutoHighlightStart)
-        threadAutoHighlight.Start()
-    End Sub
+            threadAutoHighlight = New Thread(AddressOf AutoHighlightStart)
+            threadAutoHighlight.Start()
+        End Sub
 
 
-    Public Sub Lock()
-        ' Stop redrawing:  
-        SendMessage(Textbox.Handle, WM_SETREDRAW, 0, IntPtr.Zero)
-        ' Stop sending of events:  
-        stateLocked = SendMessage(Textbox.Handle, EM_GETEVENTMASK, 0, IntPtr.Zero)
-        ' change colors and stuff in the RichTextBox  
-    End Sub
+        Public Sub Lock()
+            ' Stop redrawing:  
+            SendMessage(Textbox.Handle, WM_SETREDRAW, 0, IntPtr.Zero)
+            ' Stop sending of events:  
+            stateLocked = SendMessage(Textbox.Handle, EM_GETEVENTMASK, 0, IntPtr.Zero)
+            ' change colors and stuff in the RichTextBox  
+        End Sub
 
-    Public Sub Unlock()
-        ' turn on events  
-        SendMessage(Textbox.Handle, EM_SETEVENTMASK, 0, stateLocked)
-        ' turn on redrawing  
-        SendMessage(Textbox.Handle, WM_SETREDRAW, 1, IntPtr.Zero)
+        Public Sub Unlock()
+            ' turn on events  
+            SendMessage(Textbox.Handle, EM_SETEVENTMASK, 0, stateLocked)
+            ' turn on redrawing  
+            SendMessage(Textbox.Handle, WM_SETREDRAW, 1, IntPtr.Zero)
 
-        stateLocked = IntPtr.Zero
-        Textbox.Invalidate()
-    End Sub
+            stateLocked = IntPtr.Zero
+            Textbox.Invalidate()
+        End Sub
 
-    Sub textbox_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs)
-        ' undo/redo
-        If e.KeyValue = 89 AndAlso e.Control Then
-            Redo()
-            ' CTRL-Y
-        End If
-        If e.KeyValue = 90 AndAlso e.Control Then
-            Undo()
-            ' CTRL-Z
-        End If
-    End Sub
+        Sub textbox_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs)
+            ' undo/redo
+            If e.KeyValue = 89 AndAlso e.Control Then
+                Redo()
+                ' CTRL-Y
+            End If
+            If e.KeyValue = 90 AndAlso e.Control Then
+                Undo()
+                ' CTRL-Z
+            End If
+        End Sub
 
-    Sub Textbox_TextChanged(ByVal sender As Object, ByVal e As EventArgs)
-        If stateLocked <> IntPtr.Zero Then
-            Return
-        End If
+        Sub Textbox_TextChanged(ByVal sender As Object, ByVal e As EventArgs)
+            If stateLocked <> IntPtr.Zero Then
+                Return
+            End If
 
-        DoAction(Textbox.Rtf, Textbox.SelectionStart)
+            DoAction(Textbox.Rtf, Textbox.SelectionStart)
 
-        HighlightText()
-    End Sub
+            HighlightText()
+        End Sub
 
-    Sub Textbox_SelectionChanged(ByVal sender As Object, ByVal e As EventArgs)
-        If stateLocked <> IntPtr.Zero Then
-            Return
-        End If
+        Sub Textbox_SelectionChanged(ByVal sender As Object, ByVal e As EventArgs)
+            If stateLocked <> IntPtr.Zero Then
+                Return
+            End If
 
-        Dim newContext As ParseNode = GetCurrentContext()
+            Dim newContext As ParseNode = GetCurrentContext()
 
-        If currentContext Is Nothing Then
-            currentContext = newContext
-        End If
-        If newContext Is Nothing Then
-            Return
-        End If
+            If currentContext Is Nothing Then
+                currentContext = newContext
+            End If
+            If newContext Is Nothing Then
+                Return
+            End If
 
-        If newContext.Token.Type <> currentContext.Token.Type Then
-            RaiseEvent SwitchContext(Me, New ContextSwitchEventArgs(currentContext, newContext))
-            'SwitchContext.Invoke(Me, New ContextSwitchEventArgs(currentContext, newContext))
-            currentContext = newContext
-        End If
+            If newContext.Token.Type <> currentContext.Token.Type Then
+                RaiseEvent SwitchContext(Me, New ContextSwitchEventArgs(currentContext, newContext))
+                'SwitchContext.Invoke(Me, New ContextSwitchEventArgs(currentContext, newContext))
+                currentContext = newContext
+            End If
 
-    End Sub
+        End Sub
 
-    ''' <summary>
-    ''' this handy function returns the section in which the user is editing currently
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function GetCurrentContext() As ParseNode
-        Dim node As ParseNode = FindNode(Tree, Textbox.SelectionStart)
-        Return node
-    End Function
+        ''' <summary>
+        ''' this handy function returns the section in which the user is editing currently
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetCurrentContext() As ParseNode
+            Dim node As ParseNode = FindNode(Tree, Textbox.SelectionStart)
+            Return node
+        End Function
 
-    Private Function FindNode(ByVal node As ParseNode, ByVal posstart As Integer) As ParseNode
+        Private Function FindNode(ByVal node As ParseNode, ByVal posstart As Integer) As ParseNode
 
-        If node Is Nothing Then
-            Return Nothing
-        End If
+            If node Is Nothing Then
+                Return Nothing
+            End If
 
-        If node.Token.StartPos <= posstart AndAlso (node.Token.StartPos + node.Token.Length) >= posstart Then
-            For Each n As ParseNode In node.Nodes
-                If n.Token.StartPos <= posstart AndAlso (n.Token.StartPos + n.Token.Length) >= posstart Then
-                    Return FindNode(n, posstart)
+            If node.Token.StartPos <= posstart AndAlso (node.Token.StartPos + node.Token.Length) >= posstart Then
+                For Each n As ParseNode In node.Nodes
+                    If n.Token.StartPos <= posstart AndAlso (n.Token.StartPos + n.Token.Length) >= posstart Then
+                        Return FindNode(n, posstart)
+                    End If
+                Next
+                Return node
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        ''' <summary>
+        ''' use HighlighText to start the text highlight process from the caller's thread.
+        ''' this method is not used internally. 
+        ''' </summary>
+        Public Sub HighlightText()
+            SyncLock treelock
+                textChanged = True
+                currentText = Textbox.Text
+            End SyncLock
+        End Sub
+
+        Private Sub HighlightTextInternal()
+            ' highlight the text (used internally only)
+            Lock()
+
+            Dim hscroll As Integer = HScrollPos
+            Dim vscroll As Integer = VScrollPos
+
+            Dim selstart As Integer = Textbox.SelectionStart
+
+            HighlighTextCore()
+
+            Textbox.[Select](selstart, 0)
+
+            HScrollPos = hscroll
+            VScrollPos = vscroll
+
+            Unlock()
+        End Sub
+
+        ''' <summary>
+        ''' this method should be used only by HighlightText or RestoreState methods
+        ''' </summary>
+        Private Sub HighlighTextCore()
+            'Tree = Parser.Parse(Textbox.Text);
+            Dim sb As New StringBuilder()
+            If Tree Is Nothing Then
+                Return
+            End If
+
+            Dim start As ParseNode = Tree.Nodes(0)
+            HightlightNode(start, sb)
+
+            ' append any trailing skipped tokens that were scanned
+            For Each skiptoken As Token In Scanner.Skipped
+                HighlightToken(skiptoken, sb)
+                sb.Append(skiptoken.Text.Replace("\", "\\").Replace("{", "\{").Replace("}", "\}").Replace(vbLf, "\par" & vbLf))
+            Next
+
+            sb = Unicode(sb)     ' <--- without this, unicode characters will be garbled after highlighting
+
+            AddRtfHeader(sb)
+            AddRtfEnd(sb)
+
+            Textbox.Rtf = sb.ToString()
+
+        End Sub
+
+
+        ''' <summary>
+        ''' added function to convert unicode characters in the stringbuilder to rtf unicode escapes
+        ''' </summary>
+        Function Unicode(ByVal sb As StringBuilder) As StringBuilder
+
+            Dim i As Integer
+            Dim uc As StringBuilder = New StringBuilder
+            For i = 0 To sb.Length - 1
+                Dim c As Char = sb(i)
+                If AscW(c) < 127 Then
+                    uc.Append(c.ToString())
+                Else
+                    uc.Append("\u" & CStr(AscW(c)) + "?")
                 End If
             Next
-            Return node
-        Else
-            Return Nothing
-        End If
-    End Function
 
-    ''' <summary>
-    ''' use HighlighText to start the text highlight process from the caller's thread.
-    ''' this method is not used internally. 
-    ''' </summary>
-    Public Sub HighlightText()
-        SyncLock treelock
-            textChanged = True
-            currentText = Textbox.Text
-        End SyncLock
-    End Sub
+            Return uc
 
-    Private Sub HighlightTextInternal()
-        ' highlight the text (used internally only)
-        Lock()
+        End Function
 
-        Dim hscroll As Integer = HScrollPos
-        Dim vscroll As Integer = VScrollPos
+        ' thread start for the automatic highlighting
+        Private Shared treelock As New Object()
+        Private isDisposing As Boolean
+        Private textChanged As Boolean
+        Private currentText As String
 
-        Dim selstart As Integer = Textbox.SelectionStart
-
-        HighlighTextCore()
-
-        Textbox.[Select](selstart, 0)
-
-        HScrollPos = hscroll
-        VScrollPos = vscroll
-
-        Unlock()
-    End Sub
-
-    ''' <summary>
-    ''' this method should be used only by HighlightText or RestoreState methods
-    ''' </summary>
-    Private Sub HighlighTextCore()
-        'Tree = Parser.Parse(Textbox.Text);
-        Dim sb As New StringBuilder()
-        If Tree Is Nothing Then
-            Return
-        End If
-
-        Dim start As ParseNode = Tree.Nodes(0)
-        HightlightNode(start, sb)
-
-        ' append any trailing skipped tokens that were scanned
-        For Each skiptoken As Token In Scanner.Skipped
-            HighlightToken(skiptoken, sb)
-            sb.Append(skiptoken.Text.Replace("\", "\\").Replace("{", "\{").Replace("}", "\}").Replace(vbLf, "\par" & vbLf))
-        Next
-
-        sb = Unicode(sb)     ' <--- without this, unicode characters will be garbled after highlighting
-
-        AddRtfHeader(sb)
-        AddRtfEnd(sb)
-
-        Textbox.Rtf = sb.ToString()
-
-    End Sub
-
-
-    ''' <summary>
-    ''' added function to convert unicode characters in the stringbuilder to rtf unicode escapes
-    ''' </summary>
-    Function Unicode(ByVal sb As StringBuilder) As StringBuilder
-
-        Dim i As Integer
-        Dim uc As StringBuilder = New StringBuilder
-        For i = 0 To sb.Length - 1
-            Dim c As Char = sb(i)
-            If AscW(c) < 127 Then
-                uc.Append(c.ToString())
-            Else
-                uc.Append("\u" & CStr(AscW(c)) + "?")
-            End If
-        Next
-
-        Return uc
-
-    End Function
-
-    ' thread start for the automatic highlighting
-    Private Shared treelock As New Object()
-    Private isDisposing As Boolean
-    Private textChanged As Boolean
-    Private currentText As String
-
-    Private Sub AutoHighlightStart()
-        Dim _tree As ParseTree
-        Dim _currenttext As String = ""
-        While Not isDisposing
-            Dim _textchanged As Boolean
-            SyncLock treelock
-                _textchanged = textChanged
-                If textChanged Then
-                    textChanged = False
-                    _currenttext = currentText
-                End If
-            End SyncLock
-            If Not _textchanged Then
-                Thread.Sleep(200)
-                Continue While
-            End If
-
-            _tree = DirectCast(Parser.Parse(_currenttext), ParseTree)
-
-            SyncLock treelock
-                If textChanged Then
+        Private Sub AutoHighlightStart()
+            Dim _tree As ParseTree
+            Dim _currenttext As String = ""
+            While Not isDisposing
+                Dim _textchanged As Boolean
+                SyncLock treelock
+                    _textchanged = textChanged
+                    If textChanged Then
+                        textChanged = False
+                        _currenttext = currentText
+                    End If
+                End SyncLock
+                If Not _textchanged Then
+                    Thread.Sleep(200)
                     Continue While
-                Else
-                    ' assign new tree
-                    Tree = _tree
                 End If
-            End SyncLock
+
+                _tree = DirectCast(Parser.Parse(_currenttext), ParseTree)
+
+                SyncLock treelock
+                    If textChanged Then
+                        Continue While
+                    Else
+                        ' assign new tree
+                        Tree = _tree
+                    End If
+                End SyncLock
 
 
-            Textbox.Invoke(New MethodInvoker(AddressOf HighlightTextInternal))
-        End While
-    End Sub
+                Textbox.Invoke(New MethodInvoker(AddressOf HighlightTextInternal))
+            End While
+        End Sub
 
 
-    ''' <summary>
-    ''' inserts the RTF codes to highlight text blocks
-    ''' </summary>
-    ''' <param name="node">the node to highlight, will be appended to sb</param>
-    ''' <param name="sb">the final output string</param>
-    Private Sub HightlightNode(ByVal node As ParseNode, ByVal sb As StringBuilder)
-        If node.Nodes.Count = 0 Then
-            If (node.Token.Skipped IsNot Nothing) Then
-                For Each skiptoken As Token In node.Token.Skipped
-                    HighlightToken(skiptoken, sb)
-                    sb.Append(skiptoken.Text.Replace("\", "\\").Replace("{", "\{").Replace("}", "\}").Replace(vbLf, "\par" & vbLf))
-                Next
+        ''' <summary>
+        ''' inserts the RTF codes to highlight text blocks
+        ''' </summary>
+        ''' <param name="node">the node to highlight, will be appended to sb</param>
+        ''' <param name="sb">the final output string</param>
+        Private Sub HightlightNode(ByVal node As ParseNode, ByVal sb As StringBuilder)
+            If node.Nodes.Count = 0 Then
+                If (node.Token.Skipped IsNot Nothing) Then
+                    For Each skiptoken As Token In node.Token.Skipped
+                        HighlightToken(skiptoken, sb)
+                        sb.Append(skiptoken.Text.Replace("\", "\\").Replace("{", "\{").Replace("}", "\}").Replace(vbLf, "\par" & vbLf))
+                    Next
+                End If
+
+                HighlightToken(node.Token, sb)
+                sb.Append(node.Token.Text.Replace("\", "\\").Replace("{", "\{").Replace("}", "\}").Replace("" & Chr(10) & "", "\par" & Chr(10) & ""))
+                sb.Append("}")
             End If
 
-            HighlightToken(node.Token, sb)
-            sb.Append(node.Token.Text.Replace("\", "\\").Replace("{", "\{").Replace("}", "\}").Replace("" & Chr(10) & "", "\par" & Chr(10) & ""))
-            sb.Append("}")
-        End If
+            For Each n As ParseNode In node.Nodes
+                HightlightNode(n, sb)
+            Next
+        End Sub
 
-        For Each n As ParseNode In node.Nodes
-            HightlightNode(n, sb)
-        Next
-    End Sub
-
-    ''' <summary>
-    ''' inserts the RTF codes to highlight text blocks
-    ''' </summary>
-    ''' <param name="token">the token to highlight, will be appended to sb</param>
-    ''' <param name="sb">the final output string</param>
-    Private Sub HighlightToken(ByVal token As Token, ByVal sb As StringBuilder)
-        Select Case token.Type
+        ''' <summary>
+        ''' inserts the RTF codes to highlight text blocks
+        ''' </summary>
+        ''' <param name="token">the token to highlight, will be appended to sb</param>
+        ''' <param name="sb">the final output string</param>
+        Private Sub HighlightToken(ByVal token As Token, ByVal sb As StringBuilder)
+            Select Case token.Type
 <%HightlightTokens%>
             Case Else
-                sb.Append("{{\cf0 ")
-                Exit Select
-        End Select
-    End Sub
+                    sb.Append("{{\cf0 ")
+                    Exit Select
+            End Select
+        End Sub
 
-    ' define the color palette to be used here
-    Private Sub AddRtfHeader(ByVal sb As StringBuilder)
-        sb.Insert(0, "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Consolas;}}{\colortbl;<%RtfColorPalette%>}\viewkind4\uc1\pard\lang1033\f0\fs20")
-    End Sub
+        ' define the color palette to be used here
+        Private Sub AddRtfHeader(ByVal sb As StringBuilder)
+            sb.Insert(0, "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Consolas;}}{\colortbl;<%RtfColorPalette%>}\viewkind4\uc1\pard\lang1033\f0\fs20")
+        End Sub
 
-    Private Sub AddRtfEnd(ByVal sb As StringBuilder)
-        sb.Append("}")
-    End Sub
+        Private Sub AddRtfEnd(ByVal sb As StringBuilder)
+            sb.Append("}")
+        End Sub
 
-    Sub Textbox_Disposed(ByVal sender As Object, ByVal e As EventArgs)
-        Dispose()
-    End Sub
+        Sub Textbox_Disposed(ByVal sender As Object, ByVal e As EventArgs)
+            Dispose()
+        End Sub
 
 #Region "IDisposable Members"
 
-    Public Sub Dispose() Implements IDisposable.Dispose
-        isDisposing = True
-        threadAutoHighlight.Join(1000)
-        If threadAutoHighlight.IsAlive Then
-            threadAutoHighlight.Abort()
-        End If
-    End Sub
+        Public Sub Dispose() Implements IDisposable.Dispose
+            isDisposing = True
+            threadAutoHighlight.Join(1000)
+            If threadAutoHighlight.IsAlive Then
+                threadAutoHighlight.Abort()
+            End If
+        End Sub
 
 #End Region
 

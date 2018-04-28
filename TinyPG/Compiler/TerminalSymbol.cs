@@ -12,33 +12,33 @@ using System.Text.RegularExpressions;
 
 namespace TinyPG.Compiler
 {
-    public class TerminalSymbol : Symbol
-    {
-        public Regex Expression;
+	public class TerminalSymbol : Symbol
+	{
+		public Regex Expression;
 
-        public TerminalSymbol()
-            : this("Terminal_" + ++counter, "")
-        { }
+		public TerminalSymbol()
+			: this("Terminal_" + ++counter, "")
+		{ }
 
-        public TerminalSymbol(string name)
-            : this(name, "")
-        { }
+		public TerminalSymbol(string name)
+			: this(name, "")
+		{ }
 
-        public TerminalSymbol(string name, string pattern)
-        {
-            Name = name;
-            Expression = new Regex(pattern, RegexOptions.Compiled);
-        }
+		public TerminalSymbol(string name, string pattern)
+		{
+			Name = name;
+			Expression = new Regex(pattern, RegexOptions.Compiled);
+		}
 
-        public TerminalSymbol(string name, Regex expression)
-        {
-            Name = name;
-            Expression = expression;
-        }
+		public TerminalSymbol(string name, Regex expression)
+		{
+			Name = name;
+			Expression = expression;
+		}
 
-        public override string PrintProduction()
-        {
-            return Helper.Outline(Name, 0, " -> " + Expression + ";", 4);
-        }
-    }
+		public override string PrintProduction()
+		{
+			return Helper.Outline(Name, 0, " -> " + Expression + ";", 4);
+		}
+	}
 }

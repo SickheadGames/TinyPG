@@ -15,94 +15,94 @@ using TinyPG.Compiler;
 
 namespace TinyPG
 {
-    public sealed class SyntaxChecker : IDisposable
-    {
-        private TextMarker marker;
-        private bool disposing;
-        private string text;
-        private bool textchanged;
+	public sealed class SyntaxChecker : IDisposable
+	{
+		private TextMarker marker;
+		private bool disposing;
+		private string text;
+		private bool textchanged;
 
-        // used by the checker to check the syntax of the grammar while editing
-        public ParseTree SyntaxTree { get; set; }
+		// used by the checker to check the syntax of the grammar while editing
+		public ParseTree SyntaxTree { get; set; }
 
-        // contains the runtime compiled grammar
-        public Grammar Grammar { get; set; }
+		// contains the runtime compiled grammar
+		public Grammar Grammar { get; set; }
 
-        public event EventHandler UpdateSyntax;
+		public event EventHandler UpdateSyntax;
 
-        public SyntaxChecker(TextMarker marker)
-        {
-            UpdateSyntax = null;
-            this.marker = marker;
-            disposing = false;
-        }
+		public SyntaxChecker(TextMarker marker)
+		{
+			UpdateSyntax = null;
+			this.marker = marker;
+			disposing = false;
+		}
 
-        public void Start()
-        {
-            Scanner scanner = new Scanner();
-            Parser parser = new Parser(scanner);
+		public void Start()
+		{
+			Scanner scanner = new Scanner();
+			Parser parser = new Parser(scanner);
 
-            while (!disposing)
-            {
-                System.Threading.Thread.Sleep(250);
-                if (!textchanged) 
-                    continue;
+			while (!disposing)
+			{
+				System.Threading.Thread.Sleep(250);
+				if (!textchanged)
+					continue;
 
-                textchanged = false;
+				textchanged = false;
 
-                scanner.Init(text);
-                SyntaxTree = parser.Parse(text, "", new GrammarTree());
-                if (SyntaxTree.Errors.Count > 0)
-                    SyntaxTree.Errors.Clear();
+				scanner.Init(text);
+				SyntaxTree = parser.Parse(text, "", new GrammarTree());
+				if (SyntaxTree.Errors.Count > 0)
+					SyntaxTree.Errors.Clear();
 
-                try
-                {
-                    if (Grammar == null)
-                        Grammar = (Grammar)SyntaxTree.Eval();
-                    else
-                    {
+				try
+				{
+					if (Grammar == null)
+						Grammar = (Grammar)SyntaxTree.Eval();
+					else
+					{
 
-                        lock (Grammar)
-                        {
-                            Grammar = (Grammar)SyntaxTree.Eval();
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                   
-                }
+						lock (Grammar)
+						{
+							Grammar = (Grammar)SyntaxTree.Eval();
+						}
+					}
+				}
+				catch (Exception)
+				{
 
-                if (textchanged)
-                    continue;
+				}
 
-                lock (marker)
-                {
-                    marker.Clear();
-                    foreach (ParseError err in SyntaxTree.Errors)
-                    {
-                        marker.AddWord(err.Position, err.Length, System.Drawing.Color.Red, err.Message);
-                    }
-                }
+				if (textchanged)
+					continue;
 
-                if (UpdateSyntax != null)
-                    UpdateSyntax.Invoke(this, new EventArgs());
-            }
-        }
+				lock (marker)
+				{
+					marker.Clear();
+					foreach (ParseError err in SyntaxTree.Errors)
+					{
+						marker.AddWord(err.Position, err.Length, System.Drawing.Color.Red, err.Message);
+					}
+				}
 
-        public void Check(string text)
-        {
-            this.text = text;
-            textchanged = true;
-        }
+				if (UpdateSyntax != null)
+					UpdateSyntax.Invoke(this, new EventArgs());
+			}
+		}
 
-        #region IDisposable Members
+		public void Check(string text)
+		{
+			this.text = text;
+			textchanged = true;
+		}
 
-        public void Dispose()
-        {
-            disposing = true;
-        }
+		#region IDisposable Members
 
-        #endregion
-    }
+		public void Dispose()
+		{
+			disposing = true;
+		}
+
+		#endregion
+	}
 }

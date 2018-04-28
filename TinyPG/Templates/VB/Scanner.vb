@@ -34,7 +34,6 @@ Namespace <%Namespace%>
             SkipList = New List(Of TokenType)()
 <%SkipList%>
 <%RegExps%>
-
         End Sub
 
         Public Sub Init(ByVal input As String)
@@ -202,7 +201,7 @@ Namespace <%Namespace%>
             End Set
         End Property
 
-        <XmlAttribute()> _
+        <XmlAttribute()>
         Public Type As TokenType
 
         Public Sub New()
@@ -227,16 +226,16 @@ Namespace <%Namespace%>
             End If
         End Sub
 
-		Public Overloads Overrides Function ToString() As String<%ImplementsITokenToString%>
+        Public Overloads Overrides Function ToString() As String<%ImplementsITokenToString%>
             If Text <> Nothing Then
-				Return Type.ToString() + " '" + Text + "'"
-			Else
-				Return Type.ToString()
-			End If
-		End Function
+                Return Type.ToString() + " '" + Text + "'"
+            Else
+                Return Type.ToString()
+            End If
+        End Function
 
-		<%ScannerCustomCode%>
+        <%ScannerCustomCode%>
 
-	End Class
+End Class
 #End Region
 End Namespace

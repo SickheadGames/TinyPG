@@ -9,7 +9,7 @@ Imports System.Xml.Serialization
 
 Namespace <%Namespace%>
 #Region "ParseTree"
-    <Serializable()> _
+    <Serializable()>
     Public Class ParseErrors
         Inherits <%ParseErrors%>
 
@@ -18,7 +18,7 @@ Namespace <%Namespace%>
         End Sub
     End Class
 
-    <Serializable()> _
+    <Serializable()>
     Public Class ParseError <%ParseError%>
         Private m_message As String
         Private m_code As Integer
@@ -63,11 +63,11 @@ Namespace <%Namespace%>
             End Get
         End Property
 
-		Public Sub New(ByVal message As String, ByVal code As Integer, ByVal tok As Token)
-			Me.New(message, code, 0, tok.StartPos, tok.StartPos, tok.Length)
-		End Sub
+        Public Sub New(ByVal message As String, ByVal code As Integer, ByVal tok As Token)
+            Me.New(message, code, 0, tok.StartPos, tok.StartPos, tok.Length)
+        End Sub
 
-		Public Sub New(ByVal message As String, ByVal code As Integer, ByVal line As Integer, ByVal col As Integer, ByVal pos As Integer, ByVal length As Integer)
+        Public Sub New(ByVal message As String, ByVal code As Integer, ByVal line As Integer, ByVal col As Integer, ByVal pos As Integer, ByVal length As Integer)
             m_message = message
             m_code = code
             m_line = line
@@ -78,7 +78,7 @@ Namespace <%Namespace%>
     End Class
 
     ' rootlevel of the node tree
-    <Serializable()> _
+    <Serializable()>
     Partial Public Class ParseTree
         Inherits ParseNode<%IParseTree%>
 
@@ -96,37 +96,37 @@ Namespace <%Namespace%>
 
         Public Function PrintTree() As String<%ImplementsIParseTreePrintTree%>
     Dim sb As New StringBuilder()
-    Dim indent As Integer = 0
+            Dim indent As Integer = 0
             PrintNode(sb, Me, indent)
             Return sb.ToString()
         End Function
 
-    Private Sub PrintNode(ByVal sb As StringBuilder, ByVal node As ParseNode, ByVal indent As Integer)
+        Private Sub PrintNode(ByVal sb As StringBuilder, ByVal node As ParseNode, ByVal indent As Integer)
 
-        Dim space As String = "".PadLeft(indent, " "c)
+            Dim space As String = "".PadLeft(indent, " "c)
 
-        sb.Append(space)
-        sb.AppendLine(node.Text)
+            sb.Append(space)
+            sb.AppendLine(node.Text)
 
-        For Each n As ParseNode In node.Nodes
-            PrintNode(sb, n, indent + 2)
-        Next
-    End Sub
+            For Each n As ParseNode In node.Nodes
+                PrintNode(sb, n, indent + 2)
+            Next
+        End Sub
 
-    ''' <summary>
-    ''' this is the entry point for executing and evaluating the parse tree.
-    ''' </summary>
-    ''' <param name="paramlist">additional optional input parameters</param>
-    ''' <returns>the output of the evaluation function</returns>
-    Public Overloads Function Eval(ByVal ParamArray paramlist As Object()) As Object<%ImplementsIParseTreeEval%>
+        ''' <summary>
+        ''' this is the entry point for executing and evaluating the parse tree.
+        ''' </summary>
+        ''' <param name="paramlist">additional optional input parameters</param>
+        ''' <returns>the output of the evaluation function</returns>
+        Public Overloads Function Eval(ByVal ParamArray paramlist As Object()) As Object<%ImplementsIParseTreeEval%>
         Return Nodes(0).Eval(Me, paramlist)
-    End Function
+        End Function
     End Class
 #End Region
 
 #Region "ParseNode"
-    <Serializable()> _
-    <XmlInclude(GetType(ParseTree))> _
+    <Serializable()>
+    <XmlInclude(GetType(ParseTree))>
     Partial Public Class ParseNode <%IParseNode%>
         Protected m_text As String
         Protected m_nodes As List(Of ParseNode)
@@ -139,11 +139,11 @@ Namespace <%Namespace%>
         End Property
 
         <%INodesGet%>
-        <XMLIgnore()> _
+        <XMLIgnore()>
         Public Parent As ParseNode
         Public Token As Token
         ' the token/rule
-        <XmlIgnore()> _
+        <XmlIgnore()>
         Public Property Text() As String<%ImplementsIParseNodeText%>
             ' text to display in parse tree 
             Get
@@ -177,7 +177,7 @@ Namespace <%Namespace%>
             End If
 
             ' left to right
-            For Each node As ParseNode In nodes
+            For Each node As ParseNode In Nodes
                 If node.Token.Type = type Then
                     System.Math.Max(System.Threading.Interlocked.Decrement(index), index + 1)
                     If index < 0 Then
@@ -207,7 +207,7 @@ Namespace <%Namespace%>
             Return Value
         End Function
 
-<%VirtualEvalMethods%>
+        <%VirtualEvalMethods%>
 
 <%ParseTreeCustomCode%>
     End Class

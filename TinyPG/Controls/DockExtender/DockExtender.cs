@@ -15,206 +15,206 @@ using System.ComponentModel;
 
 namespace TinyPG.Controls
 {
-    [ProvideProperty("Dockable", typeof(Panel))]	
+	[ProvideProperty("Dockable", typeof(Panel))]
 
-    public sealed class DockExtender : Component, IExtenderProvider, ISupportInitialize
-    {
-        private Control _dockHost;
-        private Floaties _floaties;
+	public sealed class DockExtender : Component, IExtenderProvider, ISupportInitialize
+	{
+		private Control _dockHost;
+		private Floaties _floaties;
 
-        private bool _dockable;
-
-
-        // this is the blue overlay that presents a preview how the control will be docked
-        internal Overlay Overlay = new Overlay();
+		private bool _dockable;
 
 
-        public bool Dockable
-        {
-            get { return _dockable; }
-            set { _dockable = value; }
-        }
+		// this is the blue overlay that presents a preview how the control will be docked
+		internal Overlay Overlay = new Overlay();
 
-        public Floaties Floaties
-        {
-            get { return _floaties; } 
-        }
 
-        public DockExtender()
-        {
-            _dockHost = null;
-            _floaties = new Floaties();
-        }
+		public bool Dockable
+		{
+			get { return _dockable; }
+			set { _dockable = value; }
+		}
 
-        public DockExtender(Control dockHost)
-        {
-            _dockHost = dockHost;
-            _floaties = new Floaties();
-        }
+		public Floaties Floaties
+		{
+			get { return _floaties; }
+		}
 
-        /// <summary>
-        /// display the container control that is either floating or docked
-        /// </summary>
-        /// <param name="container"></param>
-        public void Show(Control container)
-        {
-            IFloaty f = _floaties.Find(container);
-            if (f != null) f.Show();
-        }
+		public DockExtender()
+		{
+			_dockHost = null;
+			_floaties = new Floaties();
+		}
 
-        /// <summary>
-        /// this will gracefully hide the container control
-        /// making sure that the floating window is also closed
-        /// </summary>
-        /// <param name="container"></param>
-        public void Hide(Control container)
-        {
-            IFloaty f = _floaties.Find(container);
-            if (f != null) f.Hide();
-        }
+		public DockExtender(Control dockHost)
+		{
+			_dockHost = dockHost;
+			_floaties = new Floaties();
+		}
 
-        /// <summary>
-        /// Attach a container control and use it as a grip hande. The container must support mouse move events.
-        /// </summary>
-        /// <param name="container">container to make dockable/floatable</param>
-        /// <returns>the floaty that manages the container's behaviour</returns>
-        public IFloaty Attach(Control container)
-        {
-            return Attach(container, container, null);
-        }
+		/// <summary>
+		/// display the container control that is either floating or docked
+		/// </summary>
+		/// <param name="container"></param>
+		public void Show(Control container)
+		{
+			IFloaty f = _floaties.Find(container);
+			if (f != null) f.Show();
+		}
 
-        /// <summary>
-        /// Attach a container and a grip handle. The handle must support mouse move events.
-        /// </summary>
-        /// <param name="container">container to make dockable/floatable</param>
-        /// <param name="handle">grip handle used to drag the container</param>
-        /// <returns>the floaty that manages the container's behaviour</returns>
-        public IFloaty Attach(Control container, Control handle)
-        {
-            return Attach(container, handle, null);
-        }
+		/// <summary>
+		/// this will gracefully hide the container control
+		/// making sure that the floating window is also closed
+		/// </summary>
+		/// <param name="container"></param>
+		public void Hide(Control container)
+		{
+			IFloaty f = _floaties.Find(container);
+			if (f != null) f.Hide();
+		}
 
-        /// <summary>
-        /// attach this class to any dockable type of container control 
-        /// to make it dockable.
-        /// Attach a container control and use it as a grip hande. The handle must support mouse move events.
-        /// Supply a splitter control to allow resizing of the docked container
-        /// </summary>
-        /// <param name="container">control to be dockable</param>
-        /// <param name="handle">handle to be used to track the mouse movement (e.g. caption of the container)</param>
-        /// <param name="splitter">splitter to resize the docked container (optional)</param>
-        public IFloaty Attach(Control container, Control handle, Splitter splitter)
-        {
-            if (container == null) throw new ArgumentException("container cannot be null");
-            if (handle == null) throw new ArgumentException("handle cannot be null");
+		/// <summary>
+		/// Attach a container control and use it as a grip hande. The container must support mouse move events.
+		/// </summary>
+		/// <param name="container">container to make dockable/floatable</param>
+		/// <returns>the floaty that manages the container's behaviour</returns>
+		public IFloaty Attach(Control container)
+		{
+			return Attach(container, container, null);
+		}
 
-            DockState _dockState = new DockState();
-            _dockState.Container = container;
-            _dockState.Handle = handle;
-            _dockState.OrgDockHost = _dockHost;
-            _dockState.Splitter = splitter;
+		/// <summary>
+		/// Attach a container and a grip handle. The handle must support mouse move events.
+		/// </summary>
+		/// <param name="container">container to make dockable/floatable</param>
+		/// <param name="handle">grip handle used to drag the container</param>
+		/// <returns>the floaty that manages the container's behaviour</returns>
+		public IFloaty Attach(Control container, Control handle)
+		{
+			return Attach(container, handle, null);
+		}
 
-            Floaty floaty = new Floaty(this);
-            floaty.Attach(_dockState);
-            _floaties.Add(floaty);
-            return floaty;
-        }
+		/// <summary>
+		/// attach this class to any dockable type of container control 
+		/// to make it dockable.
+		/// Attach a container control and use it as a grip hande. The handle must support mouse move events.
+		/// Supply a splitter control to allow resizing of the docked container
+		/// </summary>
+		/// <param name="container">control to be dockable</param>
+		/// <param name="handle">handle to be used to track the mouse movement (e.g. caption of the container)</param>
+		/// <param name="splitter">splitter to resize the docked container (optional)</param>
+		public IFloaty Attach(Control container, Control handle, Splitter splitter)
+		{
+			if (container == null) throw new ArgumentException("container cannot be null");
+			if (handle == null) throw new ArgumentException("handle cannot be null");
 
-        // finds the potential dockhost control at the specified location
-        internal Control FindDockHost(Floaty floaty , Point pt)
-        {
-            Control c = null;
-            if (FormIsHit(floaty.DockState.OrgDockHost, pt))
-                c = floaty.DockState.OrgDockHost; //assume toplevel control
+			DockState _dockState = new DockState();
+			_dockState.Container = container;
+			_dockState.Handle = handle;
+			_dockState.OrgDockHost = _dockHost;
+			_dockState.Splitter = splitter;
 
-            if (floaty.DockOnHostOnly)
-                return c;
+			Floaty floaty = new Floaty(this);
+			floaty.Attach(_dockState);
+			_floaties.Add(floaty);
+			return floaty;
+		}
 
-            foreach (Floaty f in Floaties)
-            {
-                if (f.DockState.Container.Visible && FormIsHit(f.DockState.Container, pt))
-                {
-                    // add this line to dissallow docking inside floaties
-                    //if (f.Visible) continue;
+		// finds the potential dockhost control at the specified location
+		internal Control FindDockHost(Floaty floaty, Point pt)
+		{
+			Control c = null;
+			if (FormIsHit(floaty.DockState.OrgDockHost, pt))
+				c = floaty.DockState.OrgDockHost; //assume toplevel control
 
-                    c = f.DockState.Container; // found suitable floating form
-                    break;
-                }
-            }
-            return c;
-        }
+			if (floaty.DockOnHostOnly)
+				return c;
 
-        // finds the potential dockhost control at the specified location
-        internal bool FormIsHit(Control c, Point pt)
-        {
-            if (c == null) return false;
+			foreach (Floaty f in Floaties)
+			{
+				if (f.DockState.Container.Visible && FormIsHit(f.DockState.Container, pt))
+				{
+					// add this line to dissallow docking inside floaties
+					//if (f.Visible) continue;
 
-            Point pc = c.PointToClient(pt);
-            bool hit = c.ClientRectangle.IntersectsWith(new Rectangle(pc, new Size(1, 1))); //.TopLevelControl; // this is tricky
-            return hit;
-        }
+					c = f.DockState.Container; // found suitable floating form
+					break;
+				}
+			}
+			return c;
+		}
 
-        #region IExtenderProvider Members
+		// finds the potential dockhost control at the specified location
+		internal bool FormIsHit(Control c, Point pt)
+		{
+			if (c == null) return false;
 
-        public bool CanExtend(object extendee)
-        {
-            return (extendee is Control);
-        }
+			Point pc = c.PointToClient(pt);
+			bool hit = c.ClientRectangle.IntersectsWith(new Rectangle(pc, new Size(1, 1))); //.TopLevelControl; // this is tricky
+			return hit;
+		}
 
-        #endregion
+		#region IExtenderProvider Members
 
-        #region ISupportInitialize Members
+		public bool CanExtend(object extendee)
+		{
+			return (extendee is Control);
+		}
 
-        public void BeginInit()
-        {
-            Console.WriteLine("DockExtender_BeginInit");
-        }
+		#endregion
 
-        public void EndInit()
-        {
-            Console.WriteLine("DockExtender_EndInit");
-        }
+		#region ISupportInitialize Members
 
-        #endregion
-    }
+		public void BeginInit()
+		{
+			Console.WriteLine("DockExtender_BeginInit");
+		}
 
-    internal struct DockState
-    {
-        /// <summary>
-        /// the docking control (usually a container class, e.g Panel)
-        /// </summary>
-        public Control Container;
-        /// <summary>
-        /// handle of the container that the user can use to select and move the container
-        /// </summary>
-        public Control Handle;
+		public void EndInit()
+		{
+			Console.WriteLine("DockExtender_EndInit");
+		}
 
-        /// <summary>
-        /// splitter that is attached to this panel for resizing.
-        /// this is optional
-        /// </summary>
-        public Splitter Splitter;
+		#endregion
+	}
 
-        /// <summary>
-        /// the parent of the container
-        /// </summary>
-        public Control OrgDockingParent;
+	internal struct DockState
+	{
+		/// <summary>
+		/// the docking control (usually a container class, e.g Panel)
+		/// </summary>
+		public Control Container;
+		/// <summary>
+		/// handle of the container that the user can use to select and move the container
+		/// </summary>
+		public Control Handle;
 
-        /// <summary>
-        /// the base docking host that contains all docking panels
-        /// </summary>
-        public Control OrgDockHost;
+		/// <summary>
+		/// splitter that is attached to this panel for resizing.
+		/// this is optional
+		/// </summary>
+		public Splitter Splitter;
 
-        /// <summary>
-        /// the origional docking style, stored in order to reset the state
-        /// </summary>
-        public DockStyle OrgDockStyle;
+		/// <summary>
+		/// the parent of the container
+		/// </summary>
+		public Control OrgDockingParent;
 
-        /// <summary>
-        /// the origional bounds of the container
-        /// </summary>
-        public Rectangle OrgBounds;
+		/// <summary>
+		/// the base docking host that contains all docking panels
+		/// </summary>
+		public Control OrgDockHost;
 
-    }
+		/// <summary>
+		/// the origional docking style, stored in order to reset the state
+		/// </summary>
+		public DockStyle OrgDockStyle;
+
+		/// <summary>
+		/// the origional bounds of the container
+		/// </summary>
+		public Rectangle OrgBounds;
+
+	}
 
 }
