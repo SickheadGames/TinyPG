@@ -499,7 +499,14 @@ namespace TinyPG
 
         private void pasteMenuItem_Click(object sender, EventArgs e)
         {
-            this.textEditor.Paste();
+            if (this.textEditor.Focused)
+            {
+                this.textEditor.Paste();
+            }
+            else
+            {
+                this.textInput.Paste();
+            }
         }
 
         private void findMenuItem_Click(object sender, EventArgs e)

@@ -487,7 +487,7 @@ namespace <%Namespace%>
         // define the color palette to be used here
         private void AddRtfHeader(StringBuilder sb)
         {
-            sb.Insert(0, @"{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Consolas;}}{\colortbl;<%RtfColorPalette%>}\viewkind4\uc1\pard\lang1033\f0\fs20");
+            sb.Insert(0, @"{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Consolas;}}{\colortbl;<%RtfColorPalette%>}\viewkind4\uc1\pard\lang1033\f0\fs30");
         }
 
         private void AddRtfEnd(StringBuilder sb)
