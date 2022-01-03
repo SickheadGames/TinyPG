@@ -17,6 +17,8 @@ using TinyPG.Debug;
 using TinyPG.Controls;
 using System.Globalization;
 using TinyPG.CodeGenerators;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace TinyPG
 {
@@ -64,6 +66,11 @@ namespace TinyPG
         // keep this event handler reference in a seperate object, so it can be
         // unregistered on closing. this is required because the checker runs on a seperate thread
         EventHandler syntaxUpdateChecker;
+
+        private int LastFindIndex = -1;
+        private string SearchTerm = "";
+        private Stack<string> UndoList;
+        private bool IsPushingFromUndoList = false;
 
         #endregion
 
@@ -280,6 +287,9 @@ namespace TinyPG
                 SetFormCaption();
             }
 
+            if (!this.IsPushingFromUndoList)
+                this.addToUndoList((sender as RichTextBox).Text);
+
         }
 
         void TextChangedTimer_Tick(object sender, EventArgs e)
@@ -470,6 +480,69 @@ namespace TinyPG
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private void undoMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.UndoList != null && this.UndoList.Count > 0)
+            {
+                this.IsPushingFromUndoList = true;
+                this.textEditor.Text = this.UndoList.Pop();
+                this.IsPushingFromUndoList = false;
+            }
+        }
+
+        private void copyMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.textEditor.Focused)
+            {
+                this.textEditor.Copy();
+            }
+            else
+            {
+                this.textInput.Copy();
+            }
+        }
+
+        private void pasteMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.textEditor.Focused)
+            {
+                this.textEditor.Paste();
+            }
+            else
+            {
+                this.textInput.Paste();
+            }
+        }
+
+        private void findMenuItem_Click(object sender, EventArgs e)
+        {
+            FindDialog dialog = new FindDialog();
+            dialog.ShowDialog();
+            this.LastFindIndex = -1;
+            this.SearchTerm = dialog.SearchTerm;
+
+            this.findText();
+        }
+
+        private void findNextMenuItem_Click(object sender, EventArgs e)
+        {
+            this.findText();
+        }
+
+        private void findText()
+        {
+            if (!string.IsNullOrEmpty(this.SearchTerm))
+                this.LastFindIndex = this.textEditor.Find(this.SearchTerm, this.LastFindIndex + 1, RichTextBoxFinds.None);
+        }
+
+        private void addToUndoList(string text)
+        {
+            if (this.UndoList == null)
+                this.UndoList = new Stack<string>();
+
+            this.UndoList.Push(text);
         }
 
         #endregion Form events

@@ -565,7 +565,7 @@ namespace TinyPG.Highlighter
         // define the color palette to be used here
         private void AddRtfHeader(StringBuilder sb)
         {
-            sb.Insert(0, @"{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Consolas;}}{\colortbl;\red0\green128\blue0;\red0\green128\blue0;\red255\green0\blue0;\red128\green0\blue255;\red128\green0\blue128;\red128\green0\blue128;\red43\green145\blue202;\red0\green0\blue255;\red255\green0\blue0;\red0\green0\blue255;\red43\green145\blue202;\red0\green128\blue0;\red0\green128\blue0;\red163\green21\blue21;\red0\green128\blue0;\red0\green128\blue0;\red163\green21\blue21;\red0\green128\blue0;\red0\green128\blue0;\red163\green21\blue21;\red128\green0\blue128;\red128\green0\blue128;\red0\green0\blue255;\red128\green0\blue128;\red163\green21\blue21;}\viewkind4\uc1\pard\lang1033\f0\fs20");
+            sb.Insert(0, @"{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Consolas;}}{\colortbl;\red0\green128\blue0;\red0\green128\blue0;\red255\green0\blue0;\red128\green0\blue255;\red128\green0\blue128;\red128\green0\blue128;\red43\green145\blue202;\red0\green0\blue255;\red255\green0\blue0;\red0\green0\blue255;\red43\green145\blue202;\red0\green128\blue0;\red0\green128\blue0;\red163\green21\blue21;\red0\green128\blue0;\red0\green128\blue0;\red163\green21\blue21;\red0\green128\blue0;\red0\green128\blue0;\red163\green21\blue21;\red128\green0\blue128;\red128\green0\blue128;\red0\green0\blue255;\red128\green0\blue128;\red163\green21\blue21;}\viewkind4\uc1\pard\lang1033\f0\fs30");
         }
 
         private void AddRtfEnd(StringBuilder sb)

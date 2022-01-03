@@ -479,8 +479,8 @@ Namespace <%Namespace%>
 
     ' define the color palette to be used here
     Private Sub AddRtfHeader(ByVal sb As StringBuilder)
-        sb.Insert(0, "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Consolas;}}{\colortbl;<%RtfColorPalette%>}\viewkind4\uc1\pard\lang1033\f0\fs20")
-    End Sub
+            sb.Insert(0, "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Consolas;}}{\colortbl;<%RtfColorPalette%>}\viewkind4\uc1\pard\lang1033\f0\fs30")
+        End Sub
 
     Private Sub AddRtfEnd(ByVal sb As StringBuilder)
         sb.Append("}")
